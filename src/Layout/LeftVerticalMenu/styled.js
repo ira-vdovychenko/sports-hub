@@ -1,6 +1,6 @@
 import styled  from "styled-components";
 
-export const LeftMenuContainer = styled.div`
+export const LeftMenuContainer = styled.aside`
 width: 125px;
 max-width: 125px; 
 height: 673px;

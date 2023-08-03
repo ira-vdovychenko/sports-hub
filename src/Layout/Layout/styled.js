@@ -13,7 +13,7 @@ flex: 1;
 display: flex;
 min-height: 0;
 `;
-export const MainContent = styled.div`
+export const MainContent = styled.main`
 flex: 1;
 background-color: rgba(215, 33, 48, 0.11);
 margin: 82px 54px 48px 0px;
