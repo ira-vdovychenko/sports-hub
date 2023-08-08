@@ -2,7 +2,7 @@ import React from "react";
 import { Layout } from '../Layout/Layout';
 
 
-function ArticlesPage () {
+function MenuPage () {
     return (
         <Layout>
            
@@ -10,4 +10,4 @@ function ArticlesPage () {
     )
 }
 
-export default ArticlesPage;
+export default MenuPage;

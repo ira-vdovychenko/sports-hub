@@ -1,6 +1,6 @@
 import React from "react";
 import HomePage from './pages/HomePage';
-import ArticlesPage from "./pages/ArticlesPage";
+import MenuPage from "./pages/MenuPage";
 import UserProfilePage from './pages/UserProfilePage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import MuSyrveysPage from './pages/MySurveysPage';
@@ -13,7 +13,7 @@ const router = createBrowserRouter(
     <>
       <Route index element={<HomePage />} />
       <Route element={<HomePage />} path='/home' />
-      <Route element={<ArticlesPage />} path='/articles' />
+      <Route element={<MenuPage />} path='/menu' />
       <Route element={<UserProfilePage />} path='/user' />
       <Route element={<ChangePasswordPage />} path='/changepassword' />
       <Route element={<MuSyrveysPage />} path='/surveys' />
