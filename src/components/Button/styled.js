@@ -73,4 +73,5 @@ background: ${(props) => {
     }
   }};
 `
+
 export default StyledButton;
