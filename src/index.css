@@ -1,6 +1,21 @@
 body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;
+}
 
+:root {
+  --margin-value: 300px;
+  --site-height: 2100px;
+  --user-header-height: 83px;
+  --menu--size: calc(var(--site-height) * 0.45);
+  --icon--size: calc(var(--site-height) *0.06);
+  --icon--position: calc(83px + var(--menu--size));
+  --header-height: 249px;
+  --main--area-width: calc(110% - 2.2 * var(--margin-value));
+  --primary--area--height: calc(85vw - var(--margin-value));
+  --secondary--area-position: calc((var(--site-height) * 0.49) );
+  --footer-row-height-top: 294px;
+  --footer-row-height-bottom: 83px;
+  --header-row-height: 83px;
 }
 

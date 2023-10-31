@@ -2,73 +2,72 @@ import styled from "styled-components";
 
 
 export const AdditionalContentArea = styled.div`
-    position: absolute;
-    top: 1771px;
-    left: 253px;
-    padding-left: 50px;//забрати
+    width: calc(0.75 * var(--main--area-width));
+    height: calc(65vw - var(--margin-value));
     max-width: 1071px;
+    max-height: 784px;
+    position: absolute;
+    top: calc(var(--secondary--area-position) + 550px );
+    margin-left: 350px;
     display: flex;
     flex-direction: column;
-    height: 1034px;
-    width: 816px;
-    margin-top: 51px;
-    flex:1;
-    align-items: center;
-    justify-content: space-between;
     row-gap: 46px;
+    align-items: center;
+    flex:1;
+    justify-content: space-between;
     overflow: hidden;
 `;
 
 export const PhotoOfADayBox = styled.div`
-    height: 577px;
     width: 100%;
-    border: 1px dashed #B2B2B2;
+    height: 450px;
     background-color: lightgray;
     background-repeat: no-repeat;
     background-position: center;
+    border: 1px dashed lightgray;
     flex: 1;
     overflow: hidden;
 `;
 
 export const PhotoOfADayDescription = styled.div`
-    display: flex;
-    flex: 1;
-    position: relative;
     top: 85%;
     left: 16px;
-    text-align:left;
-    text-decoration: none;
+    position: relative;
     margin-bottom: 0;
+    display: flex;
+    flex: 1;
+    text-align: left;
+    text-decoration: none;
 `;
 
 export const AdditionalNewsBox = styled.div`
+    width: 100%;
+    height: 40%;
     flex-direction: row;
     display: flex;
-    width: 100%;
-    height: 294px;
-    margin-top: 112px;
+    border: 1px dashed lightgray;
 `;
 
 export const NewsBoxRow = styled.div`
-    flex-direction: column;
     height: 100%;
     display: flex;
     flex: 1;
+    flex-direction: column;
 `;
 
 export const NewsSmallBox = styled.div`
-    overflow: hidden;
+    width: 100%;
+    height: 33%;
     display: flex;
     flex: 1;
-    height: 33%;
-    width: 100%;
+    overflow: hidden;
 `;
 
 export const NewsSmallBoxPhoto = styled.div`
-    border: 1px dashed #B2B2B2;
-    background-color: lightgray;
-    height: 100%;
     width:  40%;
+    height: 100%;
+    border: 1px dashed grey;
+    background-color: lightgray;   
 `;
 
 export const NewsSmallBoxText = styled.div`

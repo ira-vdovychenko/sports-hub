@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import * as Styled from "./styled";
 
 export default function UserHeader() {
@@ -7,9 +6,7 @@ export default function UserHeader() {
         <Styled.UserHeader>
             <Styled.UserHeaderNavbar>
                 <Styled.Logo>
-                    <Styled.LogoButton as={Link} to="/home">
-                        Sports Hub
-                    </Styled.LogoButton>
+                    <Styled.LogoLink href="#">Logo or identity</Styled.LogoLink>
                 </Styled.Logo>
                 <Styled.UserSearch>Search</Styled.UserSearch>
                 <Styled.UserSocialMedia>Social Media</Styled.UserSocialMedia>

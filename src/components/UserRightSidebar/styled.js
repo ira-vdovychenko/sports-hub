@@ -1,20 +1,20 @@
 import styled from "styled-components";
 
 export const UserRightSidebar = styled.div`
-    top: 1001px;
-    left: 1102px;
+    width:100px;
+    height: calc(0.7 * var(--site-height));
+    top: var(--icon--position);
+    right:0;
     position: absolute;
+    padding: 0 87px;
     display: flex;
     justify-content: center;
-    width: 284px;
-    height: 378px;
     overflow: hidden;
 `;
 
 export const UserRightSidebarBox = styled.div`
-    max-width: 100%;
-    max-height: 100%; 
+    margin-bottom: auto;
+    padding: 180px 100%;
     display: flex;
-    padding: 180px 100px;
-    background-color: #fbf7d5;
+    background-color: #fbf7d5;  
 `;

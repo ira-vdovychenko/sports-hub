@@ -1,17 +1,16 @@
 import styled from "styled-components";
 
 export const SecondaryContentArea = styled.div`
-    position: absolute;
-    top: 1001px;
-    left: 253px;
+    width: calc(0.75 * var(--main--area-width));
+    height: calc(50vw - var(--margin-value));
     max-width: 1071px;
+    max-height: 721px;
+    position: absolute;
+    top: var(--secondary--area-position);
+    margin-left: 350px;
     display: flex;
     flex-direction: row;
-    height: 721px;
-    width: 816px;
-    padding-left: 50px;//забрати
     align-items: center;
-    max-height: 721px;
     justify-content: space-between;
     overflow: hidden;
 
@@ -19,45 +18,45 @@ export const SecondaryContentArea = styled.div`
 
 export const SecondaryLeftBox = styled.div`
     height: 100%;
+    max-width: calc(50% - 23px);
     display: flex;
-    max-width: 390px;
     flex-direction: column;
     justify-content: center;
-    flex: 1;
+    flex:1;
     overflow: hidden;
-    border: 1px dashed #B2B2B2;
+    border: 1px dashed lightgray;
 `;
 
 export const SecondaryRightBox = styled.div`
-    row-gap: 5%;
     height: 100%;
+    max-width:calc(50% - 23px);
+    row-gap: 5%;
     display: flex;
-    width: 392px;
     flex-direction: column;
-    border: 1px dashed #B2B2B2;
+    border: 1px dashed lightgray;
 `;
 
 export const SecondaryLeft = styled.div`
+    width: 100%;
     flex: 1;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
     overflow: hidden;
 `;
 
 export const SecondaryLeftPicture = styled.div`
-    background-color: lightgray;
-    border: 1px dashed #B2B2B2;
     width: 100%;
     height: 70%;
     max-height: 196px;
+    background-color: lightgray;
+    border: 1px dashed grey; 
 `;
 
 export const SecondaryLeftText = styled.div`
+    width: 100%;
     height: 30%;
     flex: 1;
-    text-decoration: none;
-    width: 100%;
+    text-decoration: none;   
 `;
 
 export const SecondaryLeftSplit = styled.div`
@@ -66,16 +65,16 @@ export const SecondaryLeftSplit = styled.div`
 `;
 
 export const SecondaryRight = styled.div`
-    display: flex;
     width: 100%;
+    display: flex;
     flex: 1;
     overflow: hidden;
 `;
 
 export const SecondaryRightPicture = styled.div`
-    background-color: lightgray;
-    border: 1px dashed #B2B2B2;
     width: 30%;
+    background-color: lightgray;
+    border: 1px dashed grey;
 `;
 
 export const SecondaryRightText = styled.div`
@@ -88,7 +87,7 @@ export const SecondaryRightText = styled.div`
 
 export const ColumnRight = styled.div`
     height: 45%;
-    display: flex;
     width: 100%;
+    display: flex;
     flex-direction: column;
 `;
