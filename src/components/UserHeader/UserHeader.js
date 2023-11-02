@@ -1,5 +1,6 @@
 import React from "react";
 import * as Styled from "./styled";
+import Profile from "../UserProfile/Profile";
 
 export default function UserHeader() {
     return (
@@ -10,7 +11,7 @@ export default function UserHeader() {
                 </Styled.Logo>
                 <Styled.UserSearch>Search</Styled.UserSearch>
                 <Styled.UserSocialMedia>Social Media</Styled.UserSocialMedia>
-                <Styled.UserProfile>Profile</Styled.UserProfile>
+                <Profile />
                 <Styled.UserLanguages>Languages</Styled.UserLanguages>
             </Styled.UserHeaderNavbar>
         </Styled.UserHeader>
