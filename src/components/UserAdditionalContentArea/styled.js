@@ -7,7 +7,7 @@ export const AdditionalContentArea = styled.div`
     max-width: 1071px;
     max-height: 784px;
     position: absolute;
-    top: calc(var(--secondary--area-position) + 550px );
+    top: calc(var(--secondary--area-position) + 750px );
     margin-left: 350px;
     display: flex;
     flex-direction: column;

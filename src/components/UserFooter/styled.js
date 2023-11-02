@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const FooterBox = styled.footer`
     width: 100%;
-    top: calc(var(--icon--position) + 1300px );
+    top: calc(var(--icon--position) + 1650px );
     position: absolute;
     align-items: center;
 `;
