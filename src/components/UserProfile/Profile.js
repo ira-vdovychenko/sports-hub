@@ -28,14 +28,14 @@ export default function Profile() {
                         </Styled.DropDownButton>
                         {isProfileMenuOpen && (
                             <Styled.DropDownSurveyList>
-                                <Styled.DropDownSurveyItem>Ivan Balon</Styled.DropDownSurveyItem>
-                                <Styled.DropDownSurveyItem>
-                                    <Styled.ItemEmail>ivanbaloh@gmail.com</Styled.ItemEmail>
-                                </Styled.DropDownSurveyItem>
-                                <Styled.DropDownSurveyItem>View profile</Styled.DropDownSurveyItem>
-                                <Styled.DropDownSurveyItem>Change password</Styled.DropDownSurveyItem>
-                                <Styled.DropDownSurveyItem>My surveys</Styled.DropDownSurveyItem>
-                                <Styled.DropDownSurveyItem>Team Hub</Styled.DropDownSurveyItem>
+                                <Styled.DropDownNameItem>
+                                    Ivan Baloh
+                                <Styled.ItemEmail>ivanbaloh@gmail.com</Styled.ItemEmail>
+                                </Styled.DropDownNameItem>
+                                <Styled.DropDownSurveyItem to="/profile">View profile</Styled.DropDownSurveyItem>
+                                <Styled.DropDownSurveyItem to="/profile/change-password">Change password</Styled.DropDownSurveyItem>
+                                <Styled.DropDownSurveyItem to="/profile/surveys">My surveys</Styled.DropDownSurveyItem>
+                                <Styled.DropDownSurveyItem to="/profile/team-hub">Team hub</Styled.DropDownSurveyItem>
                                 <Styled.DropDownSurveyItem>Log out</Styled.DropDownSurveyItem>
                             </Styled.DropDownSurveyList>
                         )}

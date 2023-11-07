@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { ReactComponent as UpIcon } from "../../assets/UpIcon.svg";
 import { ReactComponent as DownIcon } from "../../assets/DownIcon.svg";
 
@@ -55,7 +56,7 @@ export const DropDownSurveyList = styled.div`
   box-shadow: 0px 0px 17px #00000017;
 `;
 
-export const DropDownSurveyItem = styled.div`
+export const DropDownSurveyItem = styled(Link)`
   display: flex;
   align-items: center;
   padding-left: 25px;
@@ -64,31 +65,39 @@ export const DropDownSurveyItem = styled.div`
   width: 100%;
   text-align: left;
 
+
   &:hover {
+    font-size: 14px;
     background-color: #d721301c;
     color: #C63638;
   }
 
-  &:first-child {
-    padding-top: 25px;
-    font-weight: 600;
-  }
-
-  &:first-child:hover {
-    background: none;
-    color: black;
-  }
-
   &:last-child {
-    height: 50px; 
+    height: 51px; 
     border-top: 1px solid #EDEDED;
   }
+`;
+
+export const DropDownNameItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  padding-left: 25px;
+  padding-top: 22px;
+  box-sizing: border-box;
+  height: 70px;
+  width: 100%;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 `;
 
 export const ItemEmail = styled.div`
   border-top: none;
   font-style: normal;
-  padding-top: 0px;
+  margin-top: 0px;
   font-weight: 400;
   font-size: 12px;
   line-height: 19px;

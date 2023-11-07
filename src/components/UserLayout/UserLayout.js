@@ -5,7 +5,7 @@ import UserRightSidebar from "../UserRightSidebar/UserRightSidebar";
 import PrimaryContentArea from "../UserPrimaryContentArea/PrimaryContentArea"
 import SecondaryContentArea from "../UserSecondaryContentArea/SecondaryContentArea";
 import AdditionalContentArea from "../UserAdditionalContentArea/AdditionalContentArea";
-import Footer from "../UserFooter/Footer";
+import Footer from "../UserFooter/Footer"; 
 
 export default function UserLayout(){
     return(
@@ -13,10 +13,10 @@ export default function UserLayout(){
             <UserHeader/>
             <PrimaryContentArea />
             <SecondaryContentArea />
-            <AdditionalContentArea />
+            <AdditionalContentArea /> 
             <UserLeftSidebar />
             <UserRightSidebar />
-            <Footer />  
+            <Footer />   
         </div>
     )
 }
