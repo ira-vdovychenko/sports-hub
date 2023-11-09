@@ -1,6 +1,6 @@
 import React from "react";
 import * as Styled from "./styled";
-import Profile from "../UserProfile/Profile";
+import Profile from "../ProfileSection/Profile";
 
 export default function UserHeader() {
     return (
