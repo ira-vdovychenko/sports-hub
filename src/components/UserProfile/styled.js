@@ -56,10 +56,6 @@ export const DropDownSurveyList = styled.div`
   box-shadow: 0px 0px 17px #00000017;
 `;
 
-export const AdminDropDownSurveyList = styled(DropDownSurveyList)`
-  height: 120px;
-`;
-
 export const DropDownSurveyItem = styled(Link)`
   display: flex;
   align-items: center;
