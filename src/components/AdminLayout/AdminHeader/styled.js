@@ -3,55 +3,39 @@ import styled from "styled-components";
 export const Header = styled.header`
     width: 100%;
     position: fixed;
-    z-index: 10;
+    top: 0;
+    z-index: 999;   
 `;
 
 export const HeaderNavbar = styled.nav`
-    height: var(--header-row-height);
+    height: 82px;
     display: flex;
-    background-color: #F8F3A7;
+    background-color: #FFF;
+    border-bottom: 1px solid #EDEDED;
 `;
 
-export const HeaderPageName = styled.div`
-    height: var(--header-row-height);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #D7E4F1;
-`;
-
-export const HeaderHorisontalMenu = styled.div`
-    height: var(--header-row-height);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #DFE9BE;
-`;
-
-export const Logo = styled.div`
+export const HeaderLogo = styled.div`
     width: 253px;
     margin-right: auto;
     display: flex;
     align-items: center;
-    justify-content:center;
-    background-color: #FBE7C4;
 `;
 
-export const Switch = styled.div`
-    padding: 0 30px;
+export const UserMenu = styled.div`
     display: flex;
     align-items: center;
-    background-color: #ECD3E5;
+    padding: 0 45px;
+    column-gap: 30px;
+    white-space: nowrap;
+    border-left: 1px solid #EDEDED;
 `;
 
-export const Profile = styled.div`
-    padding: 0 100px;
+export const HeaderSwitch = styled.div`
     display: flex;
     align-items: center;
-    background-color: #FBF7D5;
 `;
 
-export const LogoLink = styled.a`
-    text-decoration: none;
-    color: inherit
+export const HeaderProfile = styled.div`
+    display: flex;
+    align-items: center;
 `;

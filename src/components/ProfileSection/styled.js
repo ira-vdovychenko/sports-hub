@@ -6,7 +6,6 @@ import { ReactComponent as DownIcon } from "../../assets/DownIcon.svg";
 export const ProfileContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 50px;
   column-gap: 30px;
   background-color: #FFF;
 `;
@@ -45,8 +44,8 @@ export const DropDownButton = styled.button`
 `;
 
 export const DropDownSurveyList = styled.div`
-  width: 178px;
-  height: 286px;
+  width: fit-content;
+  min-width: 180px;
   position: absolute;
   right: 0;
   top: 25px;

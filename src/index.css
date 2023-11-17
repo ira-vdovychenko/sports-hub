@@ -14,12 +14,12 @@ a {
   --menu--size: calc(var(--site-height) * 0.45);
   --icon--size: calc(var(--site-height) *0.06);
   --icon--position: calc(83px + var(--menu--size));
-  --header-height: 249px;
+  --header-height: 216px;
   --main--area-width: calc(110% - 2.2 * var(--margin-value));
   --primary--area--height: calc(85vw - var(--margin-value));
   --secondary--area-position: calc((var(--site-height) * 0.485) );
   --footer-row-height-top: 294px;
   --footer-row-height-bottom: 83px;
-  --header-row-height: 83px;
+  /* --header-row-height: 83px; */
 }
 

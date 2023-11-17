@@ -26,8 +26,7 @@ export const Logo = styled.div`
     justify-content:center;
     width: 253px;
     margin-right: auto;
-    background-color: #FBE7C4;
-    
+    background-color: #FBE7C4; 
 `;
 
 export const UserSearch = styled.div`
@@ -52,8 +51,7 @@ export const UserProfile = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #FBF7D5;
-    
+    background-color: #ffff;
 `;
 
 export const UserLanguages = styled.div`

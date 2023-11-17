@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { ReactComponent as SwitchIcon } from '../../assets/switch.svg';
+
+export const SwitchBox = styled.div`
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+`;
 
 export const SwitchButton = styled.button`
   display: flex;
@@ -16,7 +21,7 @@ export const SwitchButton = styled.button`
 
 export const Tooltip = styled.div`
   position: absolute;
-  top: 90%;
+  top: calc(100% + 5px);
   left: 50%;
   width: 173px;
   height: 48px;
@@ -36,8 +41,17 @@ export const Tooltip = styled.div`
   transition: opacity 0.3s, visibility 0.3s;
 `;
 
-export const SwitchLayoutIcon = styled(SwitchIcon)`
-  width: 100%;
+export const TooltipArrow = styled.div`
+  position: absolute;
+  content: " ";
+  bottom: 100%;  
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #313541 transparent;
 `;
+
+
 
 

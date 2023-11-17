@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as SwitchIcon } from '../../assets/switch.svg';
 import * as Styled from "./styled";
 
 export default function Switch() {
@@ -14,15 +15,18 @@ export default function Switch() {
   };
 
   return (
-    <Styled.SwitchButton
-      onClick={navigateToPage}
-      onMouseEnter={() => setTooltipVisible(true)}
-      onMouseLeave={() => setTooltipVisible(false)}
-    >
-      <Styled.SwitchLayoutIcon />
-      <Styled.Tooltip className="tooltip" showTooltip={isTooltipVisible ? 'block' : 'none'}>
-        {tooltipText}
-      </Styled.Tooltip>
-    </Styled.SwitchButton>
+    <Styled.SwitchBox>
+      <Styled.SwitchButton
+        onClick={navigateToPage}
+        onMouseEnter={() => setTooltipVisible(true)}
+        onMouseLeave={() => setTooltipVisible(false)}
+      >
+        <SwitchIcon />
+        <Styled.Tooltip className="tooltip" $showTooltip={isTooltipVisible ? 'block' : 'none'}>
+          {tooltipText}
+          <Styled.TooltipArrow />
+        </Styled.Tooltip>
+      </Styled.SwitchButton>
+    </Styled.SwitchBox>
   );
 }
