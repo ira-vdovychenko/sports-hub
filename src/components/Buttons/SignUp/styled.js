@@ -27,4 +27,21 @@ export const SignUp = styled.button`
   &:disabled {
     display: none; 
   }
+
+`;
+export const createItemButton = styled(SignUp)`
+    width: 160px;
+      height: 32px;
+      border: 0.5px dashed #B2B2B2;
+      color: #B2B2B2;
+      padding: 0;
+      justify-content: center;
+
+      &:hover {
+        color: #B2B2B2;
+      }
+
+      &:active {
+        color: #B2B2B2;
+      }
 `;

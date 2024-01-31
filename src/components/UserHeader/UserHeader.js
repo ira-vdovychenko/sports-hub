@@ -1,9 +1,9 @@
 import React from "react";
 import * as Styled from "./styled";
-import Profile from "../ProfileSection/Profile";
-import Switch from "../AccountSwitcher/Switch";
+import { Profile } from "../ProfileSection/Profile";
+import { Switch } from "../AccountSwitcher/Switch";
 
-export default function UserHeader() {
+export const UserHeader = () => {
     return (
         <Styled.UserHeader>
             <Styled.UserHeaderNavbar>

@@ -3,7 +3,7 @@ import * as Styled from "./styled";
 
 const text = 'Lorem ipsum dolor sit amet, consectetur';
 
-export default function AdditionalContentAreajsjs() {
+export const AdditionalContentArea = () => {
     return (
         <Styled.AdditionalContentArea>
 

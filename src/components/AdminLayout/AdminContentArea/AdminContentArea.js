@@ -1,7 +1,7 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function ContentArea() {
+export const AdminContentArea = () => {
     return (
         <Styled.ContentArea>Content Area</Styled.ContentArea>
     );

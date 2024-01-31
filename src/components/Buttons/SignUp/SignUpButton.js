@@ -1,10 +1,12 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function SignUpButton({ children, onClick, disabled }) {
-    return (
-      <Styled.SignUp onClick={onClick} disabled={disabled}>
-        {children}
-      </Styled.SignUp>
-    );
-  }
+export const SignUpButton = ({ children, onClick, isCreateItemButton }) =>  {
+  const ButtonComponent = isCreateItemButton ? Styled.createItemButton : Styled.SignUp;
+
+  return (
+    <ButtonComponent onClick={onClick}>
+      {children}
+    </ButtonComponent>
+  );
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function ProfileNavigation(props) {
+export const ProfileNavigationPage = (props) => {
     return (
         <Styled.ProfileNavigationContainer>
       <Styled.Options>

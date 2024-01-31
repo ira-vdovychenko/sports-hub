@@ -1,7 +1,7 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function UserLeftSidebar() {
+export const UserLeftSidebar = () => {
     return (
         <div>
             <Styled.UserLeftSidebarMenu>

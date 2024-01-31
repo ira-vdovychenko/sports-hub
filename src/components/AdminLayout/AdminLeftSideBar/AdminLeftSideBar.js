@@ -12,7 +12,7 @@ import { ReactComponent as NewsPartnersIcon } from "../../../assets/leftmenu/New
 import { ReactComponent as AdvertisingIcon } from "../../../assets/leftmenu/Advertising.svg";
 import { Link } from "react-router-dom";
 
-export default function AdminLeftSideBar() {
+export const AdminLeftSideBar = () => {
     const menuItems = [
       { title: 'Surveys', icon: <SurveysIcon />, link: '' },
       { title: 'Banners', icon: <BannersIcon />, link: '' },
@@ -20,7 +20,7 @@ export default function AdminLeftSideBar() {
       { title: 'Footer', icon: <FooterIcon />, link: '' },
       { title: 'Share', icon: <ShareIcon />, link: '' },
       { title: 'Users', icon: <UsersIcon />, link: '' },
-      { title: 'IA', icon: <IAIcon/>, link: '' },
+      { title: 'IA', icon: <IAIcon/>, link: '/admin/information-architecture' },
       { title: 'Teams', icon: <TeamsIcon />, link: '' },
       { title: 'News Partners', icon: <NewsPartnersIcon />, link: '' },
       { title: 'Advertising', icon: <AdvertisingIcon />, link: '' },

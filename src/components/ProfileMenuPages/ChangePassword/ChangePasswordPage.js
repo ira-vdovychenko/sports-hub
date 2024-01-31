@@ -1,7 +1,7 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function ChangePassword() {
+export const ChangePasswordPage = () => {
     return (
         <Styled.ChangePasswordContainer></Styled.ChangePasswordContainer>
     )

@@ -1,7 +1,7 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function Footer() {
+export const Footer = () => {
     return (
         <Styled.FooterBox>
             <Styled.FooterTopNavbar>

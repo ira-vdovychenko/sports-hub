@@ -1,7 +1,7 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function MySurveys() {
+export const MySurveysPage = () => {
     return (
         <Styled.MySurveysContainer></Styled.MySurveysContainer>
     )

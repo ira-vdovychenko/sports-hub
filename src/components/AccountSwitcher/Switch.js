@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SwitchIcon } from '../../assets/switch.svg';
 import * as Styled from "./styled";
 
-export default function Switch() {
+export const Switch = () => {
   const navigate = useNavigate();
   const [isTooltipVisible, setTooltipVisible] = useState(false);
 

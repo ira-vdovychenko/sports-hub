@@ -1,7 +1,7 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function MySurveys() {
+export const TeamHubPage = () => {
     return (
         <Styled.TeamHubContainer></Styled.TeamHubContainer>
     )

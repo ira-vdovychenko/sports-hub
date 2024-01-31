@@ -39,3 +39,10 @@ export const HeaderProfile = styled.div`
     display: flex;
     align-items: center;
 `;
+
+export const HeaderActivePage = styled.div` 
+    display: flex;
+    height: 78px;
+    justify-content: center;
+    background-color:  #FFFFFF;
+`;

@@ -1,7 +1,7 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function HorizontalMenu({  activePage, setActivePage }) {
+export const HorizontalMenu = ({  activePage, setActivePage }) => {
     const handleLinkClick = (page) => {
       console.log("Setting active page to:", page);
         setActivePage(page);

@@ -1,7 +1,7 @@
 import React from "react";
 import * as Styled from "./styled";
 
-export default function PersonalPage() {
+export const PersonalPage = () => {
     return (
         <Styled.PersonalContainer></Styled.PersonalContainer>
     )

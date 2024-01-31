@@ -4,10 +4,10 @@ export const LogIn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 107px;
+  width: ${props => props.width || '107px'};
   height: 32px;
-  color: #D72130;
-  background-color: transparent;
+  color: ${props => props.color || "#D72130"};
+  background-color: ${props => props.backgroundcolor || 'transparent'};
   font-size: 12px;
   border: 1px solid #C63638;
   font-family: 'Open Sans';
@@ -16,8 +16,13 @@ export const LogIn = styled.button`
   line-height: 17px;
 
   &:hover {
-    color: #FFF;
-    background-color: #D72130;
+    color: ${props => props.hovercolor || "#FFF"};
+    background-color: ${props => props.hoverbackground || "#D72130"};
+    border: none;
+  }
+  &:active {
+    color: ${props => props.hovercolor || "#FFF"};
+    background-color: ${props => props.hoverbackground || "#D72130"};
     border: none;
   }
 `;

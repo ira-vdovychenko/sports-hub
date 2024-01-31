@@ -4,7 +4,7 @@ export const ContentArea = styled.div`
     width: calc(100% - 2 * var(--margin-value));
     height: calc(100% - var(--margin-value));
     display: flex;
-    position: absolute;
+    position: relative;
     justify-content: center;
     align-items: center;
     margin: var(--margin-value);

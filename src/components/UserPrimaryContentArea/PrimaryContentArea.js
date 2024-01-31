@@ -3,7 +3,7 @@ import * as Styled from "./styled";
 
 const text = 'Lorem ipsum dolor sit amet, consectetur';
 
-export default function PrimaryContentArea() {
+export const PrimaryContentArea = () => {
     return (
         <Styled.PrimaryContentArea>
             <Styled.MainArticle>
