@@ -1,5 +1,5 @@
 import React from "react";
-import * as Styled from './styled';
+import * as Styled from './styled.js';
 
 export const Input = React.forwardRef(({ type, value, name, placeholder, width, onChange, onBlur }, ref) => (
     <Styled.Input

@@ -1,5 +1,5 @@
 import React from "react";
-import * as Styled from './styled';
+import * as Styled from './styled.js';
 import SuccessIcon from '../../assets/successicon.svg';
 import CloseIcon from '../../assets/closeicon.svg';
 

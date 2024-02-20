@@ -1,5 +1,5 @@
 export const getSubcategories = async (SportID) => {
-  const res = await fetch(`/api/leagues/${SportID}`);
+  const res = await fetch(`/mirage-api/leagues/${SportID}`);
   const data = await res.json();
   const leagues = data.leagues.models.map(({ LeagueID, LeagueName, SportID, isHidden = false }) => ({
     LeagueID,
@@ -14,7 +14,7 @@ export const getSubcategories = async (SportID) => {
 export const createSubcategory = async (subcategoryData) => {
   try {
     console.log('Creating subcategory:', subcategoryData);
-    const res = await fetch('/api/leagues', {
+    const res = await fetch('/mirage-api/leagues', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export const createSubcategory = async (subcategoryData) => {
 export const updateSubcategory = async (LeagueID, subcategoryData) => {
   try {
     console.log('Updating subcategory:', subcategoryData);
-    const res = await fetch(`/api/leagues/${LeagueID}`, {
+    const res = await fetch(`/mirage-api/leagues/${LeagueID}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export const updateSubcategory = async (LeagueID, subcategoryData) => {
 }; 
   
 export const deleteSubcategory = async (LeagueID) => {
-  return await fetch(`/api/leagues/${LeagueID}`, {
+  return await fetch(`/mirage-api/leagues/${LeagueID}`, {
     method: 'DELETE',
   }).then((res) => {
     if (!res.ok) {

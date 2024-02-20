@@ -1,16 +1,16 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch  } from "react-redux";
 import { setSaveButtonClicked } from "../../../../redux/actions/iaActions";
 import { LogInButton } from "../../../../components/Buttons/LogIn/LogInButton";
 import * as Styled from "./styled";
 
 export const IAHeader = () => {
   const dispatch = useDispatch();
-  const saveButtonClicked = useSelector((state) => state.ia.saveButtonClicked);
 
   const handleSaveButtonClick = () => {
-    dispatch(setSaveButtonClicked(!saveButtonClicked));
+    dispatch(setSaveButtonClicked(true));
   };
+
   return (
     <Styled.IAHeaderBox>
       <Styled.IAHeaderTitle>Information Architecture</Styled.IAHeaderTitle>

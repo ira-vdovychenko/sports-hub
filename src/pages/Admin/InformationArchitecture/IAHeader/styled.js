@@ -1,4 +1,4 @@
-import Styled from 'styled-components';
+import Styled from "styled-components";
 
 export const IAHeaderBox = Styled.div`
     display: flex;
@@ -17,7 +17,7 @@ export const IAHeaderTitle = Styled.p`
     line-height: normal;
     text-transform: capitalize;
     margin-left: 101px;
-`;  
+`;
 
 export const IAHeaderButtonBox = Styled.div`
     display: flex;

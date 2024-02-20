@@ -47,14 +47,16 @@ export const PopupForm = styled.form`
 `;
 export const PopupInputBox = styled.div`
   display: flex;
-  margin-top: -10px;
+  margin-top: 3px;
+  margin-left: 55px;
 `;
 export const PopupLabel = styled.label`
-  margin-left: 11.4%;
+  margin-left: 55px;
+  font-family: Roboto;
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
-  line-height: normal;
+  line-height: 11.72px;
   letter-spacing: 0.9px;
   text-transform: uppercase;
   color: #7F8899;

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import * as Styled from "./styled";
-import { checkEmailExists, registerUser } from "../../../services/AuthService";
-import { Input } from "../../Input/Input";
-import { LargeButton } from "../../Buttons/Large/styled";
-import { LogInButton } from "../../Buttons/LogIn/LogInButton";
+import * as Styled from "./styled.js";
+import { checkEmailExists, registerUser } from "../../../services/AuthService.js";
+import { Input } from "../../Input/Input.jsx";
+import { LargeButton } from "../../Buttons/Large/LargeButton.jsx";
+import { LogInButton } from "../../Buttons/LogIn/LogInButton.jsx";
 import { ReactComponent as FB } from "../../../assets/FB.svg";
 import { ReactComponent as Google } from "../../../assets/Google.svg";
 

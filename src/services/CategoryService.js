@@ -1,12 +1,12 @@
 export const getCategories = async () => {
-  const res = await fetch('/api/sports');
+  const res = await fetch('/mirage-api/sports');
   return await res.json();
   };
   
 export const createCategory = async (categoryData) => {
   try {
     console.log('Creating category:', categoryData);
-    const res = await fetch('/api/sports', {
+    const res = await fetch('/mirage-api/sports', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const updateCategory = async (SportID, categoryData) => {
   try {
     console.log('Updating category:', categoryData);
     
-    const res = await fetch(`/api/sports/${SportID}`, {
+    const res = await fetch(`/mirage-api/sports/${SportID}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export const updateCategory = async (SportID, categoryData) => {
 
 export const deleteCategory = async (SportID) => {
 console.log('Deleting category with ID:', SportID);
-return await fetch(`/api/sports/${SportID}`, {
+return await fetch(`/mirage-api/sports/${SportID}`, {
   method: 'DELETE',
 }).then((res) => {
   if (!res.ok) {

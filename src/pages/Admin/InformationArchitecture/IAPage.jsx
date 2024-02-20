@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setSaveButtonClicked } from "../../../redux/actions/iaActions";
 import { IAMenu } from "./IAMenuNavigation/IAMenu";
 import { CreateItem } from "./IACreateItem/CreateItem";
 import { FlashMessage } from "../../../components/FlashMessage/FlashMessage";
@@ -10,8 +12,9 @@ import * as TeamService from "../../../services/TeamService";
 import { v4 as uuidv4 } from "uuid";
 
 export const IAPage = () => {
+  const token = useSelector((state) => state.auth.token);
+  const dispatch = useDispatch();
   const saveButtonClicked = useSelector((state) => state.ia.saveButtonClicked);
-  const accessToken = useSelector((state) => state.auth.token);
 
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState({});
@@ -459,15 +462,7 @@ export const IAPage = () => {
 
   const applyChangesOnServer = async () => {
     try {
-      if (!accessToken) {
-        console.error(
-          "Admin token is missing. Unable to apply changes on the server."
-        );
-        return;
-      }
-
-      if (!saveButtonClicked) {
-        console.error("Save button is not clicked. No changes to apply.");
+      if (!token) {
         return;
       }
 
@@ -555,11 +550,14 @@ export const IAPage = () => {
       console.error("Error applying changes on the server:", error);
     }
   };
+
   useEffect(() => {
     if (saveButtonClicked) {
       applyChangesOnServer();
+      dispatch(setSaveButtonClicked(false));
     }
-  }, [saveButtonClicked]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [saveButtonClicked, dispatch]);
 
   return (
     <Styled.IABox>
@@ -584,8 +582,8 @@ export const IAPage = () => {
           onPress={(itemType, ItemName) => createItem(itemType, ItemName)}
         />
       </Styled.AddSection>
-      <Styled.IAItemsSection>
-        <Styled.SportsItemsGroup>
+      <Styled.ItemsSection>
+        <Styled.ItemsGroup>
           {categories.map((x, index) => (
             <IAMenu
               key={index}
@@ -605,10 +603,9 @@ export const IAPage = () => {
               }
             />
           ))}
-        </Styled.SportsItemsGroup>
-
+        </Styled.ItemsGroup>
         {subcategories[selectedCategory?.SportID] && (
-          <Styled.LeaguesItemsGroup>
+          <Styled.ItemsGroup>
             {subcategories[selectedCategory?.SportID].map((x, index) => (
               <IAMenu
                 key={index}
@@ -633,11 +630,11 @@ export const IAPage = () => {
                 }
               />
             ))}
-          </Styled.LeaguesItemsGroup>
+          </Styled.ItemsGroup>
         )}
 
         {teams[selectedSubcategory?.LeagueID] && (
-          <Styled.TeamsItemsGroup>
+          <Styled.ItemsGroup>
             {teams[selectedSubcategory?.LeagueID].map((x, index) => (
               <IAMenu
                 key={index}
@@ -657,9 +654,9 @@ export const IAPage = () => {
                 }
               />
             ))}
-          </Styled.TeamsItemsGroup>
+          </Styled.ItemsGroup>
         )}
-      </Styled.IAItemsSection>
+      </Styled.ItemsSection>
     </Styled.IABox>
   );
 };

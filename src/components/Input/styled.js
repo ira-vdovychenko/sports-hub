@@ -15,7 +15,7 @@ export const Input = styled.input`
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
-    line-height: normal;
+    line-height: 16.34px;
     text-indent: 0px;
   }
 
@@ -28,7 +28,7 @@ export const Input = styled.input`
     color: #000;  
   }
 
- ]
+ 
 `;
 
 
