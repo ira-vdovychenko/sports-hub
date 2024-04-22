@@ -93,8 +93,6 @@ export const changePassword = async (email, newPassword) => {
   }
 };
 
-
-
 export const getToken = async (userEmail) => {
   try {
     const serverResponse = await fetch("http://localhost:8080/api/get-token", {
@@ -163,8 +161,6 @@ export const verifyToken = async () => {
   }
 };
 
-
-
 export const checkUserEmail = async (email) => {
   try {
     const response = await fetch("/mirage-api/check-user-email", {
@@ -209,5 +205,22 @@ export const sendEmail = async ({ email }) => {
   } catch (error) {
     console.error("Error in sendEmail:", error);
     return { success: false, error: error.message };
+  }
+};
+
+export const removeToken = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+    if (response.ok) {
+      return true;
+    } else {
+      throw new Error('Failed to logout');
+    }
+  } catch (error) {
+    console.error('Error logging out:', error);
+    throw error;
   }
 };

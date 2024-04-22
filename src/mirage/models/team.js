@@ -8,8 +8,11 @@ export default Model.extend({
   TeamName: '',
   LeagueID: {},
   SportID: {},
+  LocationID: {},
+  logo: '',
   league: belongsTo(),
   sport: belongsTo(),
+  location: belongsTo(),
 });
 
 

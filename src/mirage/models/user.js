@@ -9,7 +9,8 @@ export default Model.extend({
   LastName: '',
   Email: '',
   EncryptedPassword: '',
-  roles: hasMany()
+  roles: hasMany(),
+
 });
 
 

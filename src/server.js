@@ -25,7 +25,7 @@ async function sendEmail({ email }) {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
-      secure: true,
+      secure: true, 
       auth: {
         user: "vdovychenko.ire@gmail.com",
         pass: "halm giwa mirr wibq",
@@ -77,7 +77,7 @@ app.post("/api/get-token", (req, res) => {
   const accessToken = generateAccessToken(user);
   const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "15d" });
   refreshTokens.push(refreshToken);
-  res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: true });
+  res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: true, sameSite: 'strict', maxAge: 30 * 24 * 60 * 60 * 1000  });
   res.json({ accessToken: accessToken, refreshToken: refreshToken });
 });
 
@@ -93,6 +93,7 @@ app.post("/api/refresh-token", (req, res) => {
     if (err) {
       return res.status(403).json({ message: "Invalid refresh token" });
     }
+
     const accessToken = generateAccessToken({ Email: user.Email });
     res.json({ accessToken: accessToken });
   });
@@ -113,12 +114,24 @@ app.post("/api/verify-token", (req, res) => {
   });
 });
 
+app.post("/api/logout", (req, res) => {
+  const refreshTokenCookie = req.cookies.refreshToken;
+
+  if (refreshTokenCookie) {
+    res.clearCookie("refreshToken");
+    refreshTokens = refreshTokens.filter(token => token !== refreshTokenCookie);
+    res.send("Logged out successfully");
+  } else {
+
+    res.status(401).send("Refresh token cookie not found");
+  }
+});
 
 function generateAccessToken(user) {
     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+    console.log(accessToken);
     return accessToken;
-  }
-  
+  } 
 
 app.listen(port, () => {
   console.log(`Project is listening at http://localhost:${port}`);

@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setSaveButtonClicked } from "../../../redux/actions/iaActions";
-import { IAMenu } from "./IAMenuNavigation/IAMenu";
-import { CreateItem } from "./IACreateItem/CreateItem";
+import { setSaveButtonClicked, loadCategories, loadSubcategories, addCategory, addSubcategory, updateCategory, updateSubcategory, deleteCategory, deleteSubcategory } from "../../../redux/actions/iaActions";
+import { loadTeams, addTeam, updateTeam, deleteTeam } from "../../../redux/actions/teamActions.js";
+import { IACreateItem, IAMenu } from "./index.js";
 import { FlashMessage } from "../../../components/FlashMessage/FlashMessage";
 import * as Styled from "./styled";
 import * as CategoryService from "../../../services/CategoryService";
@@ -14,11 +14,11 @@ import { v4 as uuidv4 } from "uuid";
 export const IAPage = () => {
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
+  const categories = useSelector((state) => state.ia.categories);
+  const subcategories = useSelector((state) => state.ia.subcategories);
+  const teams = useSelector((state) => state.team.teams);
   const saveButtonClicked = useSelector((state) => state.ia.saveButtonClicked);
 
-  const [categories, setCategories] = useState([]);
-  const [subcategories, setSubcategories] = useState({});
-  const [teams, setTeams] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [flashMessage, setFlashMessage] = useState(null);
@@ -40,86 +40,53 @@ export const IAPage = () => {
     },
   });
 
-  const loadSubcategories = useCallback(
-    async (sport) => {
-      const categoryId = sport.SportID;
-
-      try {
-        let subcategoriesData;
-
-        if (!subcategories[categoryId]) {
-          subcategoriesData = await SubcategoryService.getSubcategories(
-            categoryId
-          );
-
-          setSubcategories((prevData) => ({
-            ...prevData,
-            [categoryId]: subcategoriesData,
-          }));
-        }
-
-        setSelectedSubcategory(null);
-      } catch (error) {
-        console.error("Error loading subcategories:", error);
-      }
-    },
-    [subcategories]
-  );
-
-  const loadTeams = async (league) => {
-    const subcategoryId = league.LeagueID;
-
-    try {
-      if (!teams[subcategoryId]) {
-        const teamsData = await TeamService.getTeams(subcategoryId);
-        setTeams((prevData) => ({
-          ...prevData,
-          [subcategoryId]: teamsData,
-        }));
-      }
-
-      setSelectedSubcategory(league);
-    } catch (error) {
-      console.error("Error loading teams:", error);
-    }
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const categoriesData = await CategoryService.getCategories();
-        setCategories(categoriesData.sports);
+        const categoriesArray = Object.values(categoriesData.sports);
+        dispatch(loadCategories(categoriesArray));
 
-        await Promise.all(
-          categoriesData.sports.map((category) => loadSubcategories(category))
-        );
+        const subcategoriesData = await SubcategoryService.getSubcategories();
+        dispatch(loadSubcategories(subcategoriesData));
+
+        const teamsData = await TeamService.getTeams();
+        dispatch(loadTeams(teamsData));
       } catch (error) {
         console.error("Error loading categories:", error.message);
       }
     };
-
     fetchData();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
-  const showSubcategories = async (sport) => {
-    await loadSubcategories(sport);
-    setSelectedCategory(sport);
+  const getSubcategories = (category) => {
+    setSelectedCategory(category);
+    const filteredSubcategories = subcategories.filter((subcategory) => subcategory.SportID === category.SportID);
     setSelectedSubcategory(null);
+    return filteredSubcategories;
   };
 
-  const createItem = (itemType, itemName) => {
-    const changeType = "add";
-    const newItem = {};
+  const getTeams = (subcategory) => {
+    setSelectedSubcategory(subcategory);
+    const filteredTeams = teams.filter((team) => team.LeagueID === subcategory.LeagueID);
+    return filteredTeams;
+  };
 
+  const createItem = (itemType, itemName, selectedCategory) => {
+    const newItem = {};
     switch (itemType) {
+
       case "category":
         newItem.SportID = uuidv4();
         newItem.SportName = itemName;
-
-        setCategories((prevCategories) => {
-          const newCategory = { ...newItem };
-          return [newCategory, ...prevCategories];
-        });
+        dispatch(addCategory(newItem));
+        setChanges((prevChanges) => ({
+          ...prevChanges,
+          add: {
+            ...prevChanges.add,
+            [itemType]: [...prevChanges.add[itemType], newItem],
+          },
+        }));
         break;
 
       case "subcategory":
@@ -127,13 +94,13 @@ export const IAPage = () => {
           newItem.LeagueID = uuidv4();
           newItem.LeagueName = itemName;
           newItem.SportID = selectedCategory.SportID;
-
-          setSubcategories((prevSubcategories) => ({
-            ...prevSubcategories,
-            [selectedCategory.SportID]: [
-              newItem,
-              ...(prevSubcategories[selectedCategory.SportID] || []),
-            ],
+          dispatch(addSubcategory(newItem));
+          setChanges((prevChanges) => ({
+            ...prevChanges,
+            add: {
+              ...prevChanges.add,
+              [itemType]: [...prevChanges.add[itemType], newItem],
+            },
           }));
         }
         break;
@@ -144,13 +111,13 @@ export const IAPage = () => {
           newItem.TeamName = itemName;
           newItem.LeagueID = selectedSubcategory.LeagueID;
           newItem.SportID = selectedSubcategory.SportID;
-
-          setTeams((prevTeams) => ({
-            ...prevTeams,
-            [selectedSubcategory.LeagueID]: [
-              newItem,
-              ...(prevTeams[selectedSubcategory.LeagueID] || []),
-            ],
+          dispatch(addTeam(newItem));
+          setChanges((prevChanges) => ({
+            ...prevChanges,
+            add: {
+              ...prevChanges.add,
+              [itemType]: [...prevChanges.add[itemType], newItem],
+            },
           }));
         }
         break;
@@ -158,138 +125,86 @@ export const IAPage = () => {
       default:
         break;
     }
-
-    setChanges((prevChanges) => ({
-      ...prevChanges,
-      [changeType]: {
-        ...prevChanges[changeType],
-        [itemType]: Array.isArray(prevChanges[changeType][itemType])
-          ? [...prevChanges[changeType][itemType], newItem]
-          : [newItem],
-      },
-    }));
-
-    setFlashMessage({
-      title: "Saved!",
-      description: "Information architecture is successfully saved!",
-    });
   };
 
   const editItem = (itemType, itemId, newName) => {
-    const changeType = "edit";
-    let updateKey, nameKey;
-
+    let updateKey, nameKey, changeType;
     switch (itemType) {
+
       case "category":
         updateKey = "SportID";
         nameKey = "SportName";
-        setCategories((prevCategories) =>
-          prevCategories.map((category) =>
-            category[updateKey] === itemId
-              ? { ...category, [nameKey]: newName }
-              : category
-          )
-        );
+        changeType = "edit";
+        dispatch(updateCategory(itemId, { [nameKey]: newName }));
         break;
 
       case "subcategory":
         updateKey = "LeagueID";
         nameKey = "LeagueName";
-        setSubcategories((prevSubcategories) => ({
-          ...prevSubcategories,
-          [selectedCategory.SportID]: (
-            prevSubcategories[selectedCategory.SportID] || []
-          ).map((subcategory) =>
-            subcategory[updateKey] === itemId
-              ? { ...subcategory, [nameKey]: newName }
-              : subcategory
-          ),
-        }));
+        changeType = "edit";
+        dispatch(updateSubcategory(itemId, { [nameKey]: newName }));
         break;
 
       case "team":
         updateKey = "TeamID";
         nameKey = "TeamName";
-        setTeams((prevTeams) => ({
-          ...prevTeams,
-          [selectedSubcategory.LeagueID]: (
-            prevTeams[selectedSubcategory.LeagueID] || []
-          ).map((team) =>
-            team[updateKey] === itemId ? { ...team, [nameKey]: newName } : team
-          ),
-        }));
+        changeType = "edit";
+        dispatch(updateTeam(itemId, { [nameKey]: newName }));
         break;
 
       default:
         break;
     }
-
     setChanges((prevChanges) => ({
       ...prevChanges,
       [changeType]: {
         ...prevChanges[changeType],
-        [itemType]: Array.isArray(prevChanges[changeType][itemType])
-          ? [
-              ...prevChanges[changeType][itemType].map((item) =>
-                item[updateKey] === itemId
-                  ? { ...item, [nameKey]: newName }
-                  : item
-              ),
-              ...(prevChanges[changeType][itemType].some(
-                (item) => item[updateKey] === itemId
-              )
-                ? []
-                : [{ [updateKey]: itemId, [nameKey]: newName }]),
-            ]
-          : [{ [updateKey]: itemId, [nameKey]: newName }],
+        [itemType]: [
+          ...(prevChanges[changeType][itemType] || []),
+          { [updateKey]: itemId, [nameKey]: newName },
+        ],
       },
     }));
   };
 
-  const deleteItem = (itemType, itemId) => {
+  const deleteItem = async (itemType, itemId) => {
     const changeType = "delete";
+    try {
+      switch (itemType) {
 
-    switch (itemType) {
-      case "category":
-        setCategories((prevCategories) =>
-          prevCategories.filter((category) => category.SportID !== itemId)
-        );
-        break;
-      case "subcategory":
-        setSubcategories((prevSubcategories) => {
-          const sportId = selectedCategory.SportID;
-          const updatedSubcategories = {
-            ...prevSubcategories,
-            [sportId]: (prevSubcategories[sportId] || []).filter(
-              (subcategory) => subcategory.LeagueID !== itemId
-            ),
-          };
-          return updatedSubcategories;
-        });
-        break;
-      case "team":
-        setTeams((prevTeams) => {
-          const leagueId = selectedSubcategory.LeagueID;
-          const updatedTeams = {
-            ...prevTeams,
-            [leagueId]: (prevTeams[leagueId] || []).filter(
-              (team) => team.TeamID !== itemId
-            ),
-          };
-          return updatedTeams;
-        });
-        break;
-      default:
-        break;
+        case "category":
+          const subcategoriesToDelete = subcategories.filter((subcategory) => subcategory.SportID === itemId);
+          subcategoriesToDelete.forEach((subcategory) => {
+            const teamsToDelete = teams.filter((team) => team.LeagueID === subcategory.LeagueID);
+            teamsToDelete.forEach((team) => deleteItem("team", team.TeamID));
+            deleteItem("subcategory", subcategory.LeagueID);});
+          dispatch(deleteCategory(itemId));
+          break;
+
+        case "subcategory":
+          const teamsToDelete = teams.filter((team) => team.LeagueID === itemId);
+          teamsToDelete.forEach((team) => deleteItem("team", team.TeamID));
+          dispatch(deleteSubcategory(itemId));
+          break;
+
+        case "team":
+          dispatch(deleteTeam(itemId));
+          break;
+
+        default:
+          break;
+      }
+
+      setChanges((prevChanges) => ({
+        ...prevChanges,
+        [changeType]: {
+          ...prevChanges[changeType],
+          [itemType]: [...prevChanges[changeType][itemType], { id: itemId }],
+        },
+      }));
+    } catch (error) {
+      console.error(`Error deleting ${itemType}:`, error);
     }
-
-    setChanges((prevChanges) => ({
-      ...prevChanges,
-      [changeType]: {
-        ...prevChanges[changeType],
-        [itemType]: [...prevChanges[changeType][itemType], { id: itemId }],
-      },
-    }));
   };
 
   const changeItemVisibility = (itemType, item) => {
@@ -297,49 +212,20 @@ export const IAPage = () => {
     let idKey;
 
     switch (itemType) {
+
       case "category":
         idKey = "SportID";
-        setCategories((prevCategories) =>
-          prevCategories.map((category) => {
-            const updatedCategory =
-              category[idKey] === item[idKey]
-                ? { ...category, isHidden: !item.isHidden }
-                : category;
-            return updatedCategory;
-          })
-        );
+        dispatch(updateCategory(item[idKey], { isHidden: !item.isHidden }));
         break;
 
       case "subcategory":
         idKey = "LeagueID";
-        setSubcategories((prevSubcategories) => ({
-          ...prevSubcategories,
-          [selectedCategory?.SportID]: (
-            prevSubcategories[selectedCategory?.SportID] || []
-          ).map((sub) => {
-            const updatedSubcategory =
-              sub[idKey] === item[idKey]
-                ? { ...sub, isHidden: !item.isHidden }
-                : sub;
-            return updatedSubcategory;
-          }),
-        }));
+        dispatch(updateSubcategory(item[idKey], { isHidden: !item.isHidden }));
         break;
 
       case "team":
         idKey = "TeamID";
-        setTeams((prevTeams) => ({
-          ...prevTeams,
-          [selectedSubcategory?.LeagueID]: (
-            prevTeams[selectedSubcategory?.LeagueID] || []
-          ).map((team) => {
-            const updatedTeam =
-              team[idKey] === item[idKey]
-                ? { ...team, isHidden: !item.isHidden }
-                : team;
-            return updatedTeam;
-          }),
-        }));
+        dispatch(updateTeam(item[idKey], { isHidden: !item.isHidden }));
         break;
 
       default:
@@ -361,99 +247,88 @@ export const IAPage = () => {
     }));
   };
 
-  const moveItem = async (itemType, item, newId) => {
-    const changeType = "edit";
-
+  const moveSubcategory = (itemType, item, newCategoryId) => {
     try {
       if (itemType === "subcategory") {
-        const newCategoryId = newId;
+        const updatedSubcategory = {
+          ...item,
+          LeagueID: item.LeagueID,
+          SportID: newCategoryId,
+        };
+        dispatch(updateSubcategory(item.LeagueID, updatedSubcategory));
 
-        if (!subcategories[newCategoryId]) {
-          const subcategoriesData = await SubcategoryService.getSubcategories(
-            newCategoryId
-          );
-          setSubcategories((prevSubcategories) => ({
-            ...prevSubcategories,
-            [newCategoryId]: subcategoriesData,
-          }));
-        }
+        const teamsToUpdate = teams.filter((team) => team.LeagueID === item.LeagueID);
 
-        setSubcategories((prevSubcategories) => {
-          const {
-            [selectedCategory?.SportID]: selectedSubcategories,
-            ...restSubcategories
-          } = prevSubcategories;
-          const updatedSelectedSubcategories = (
-            selectedSubcategories || []
-          ).filter((sub) => sub.LeagueID !== item.LeagueID);
-          const movedSubcategory = { ...item, LeagueID: newCategoryId };
-          const updatedNewSubcategories = [
-            movedSubcategory,
-            ...(prevSubcategories[newCategoryId] || []),
-          ];
-          const teamsToMove = teams[item.LeagueID] || [];
-          setTeams((prevTeams) => ({
-            ...prevTeams,
-            [newCategoryId]: [
-              ...(prevTeams[newCategoryId] || []),
-              ...teamsToMove,
+        const teamIDsToDelete = teamsToUpdate.map((team) => team.TeamID);
+        teamIDsToDelete.forEach((TeamID) => {
+          dispatch(deleteTeam(TeamID));
+        });
+
+        const updatedTeams = teamsToUpdate.map((team) => ({
+          ...team,
+          SportID: newCategoryId,
+        }));
+        updatedTeams.forEach((updatedTeam) => {
+          dispatch(addTeam(updatedTeam));
+        });
+
+        setChanges((prevChanges) => ({
+          ...prevChanges,
+          edit: {
+            ...prevChanges.edit,
+            subcategory: [
+              ...(prevChanges.edit.subcategory || []),
+              (item.LeagueID, updatedSubcategory),
             ],
-            [item.LeagueID]: [],
-          }));
+          },
+          delete: {
+            ...prevChanges.delete,
+          
+            team: [
+              ...(prevChanges.delete.team || []),
+              ...teamIDsToDelete.map((id) => ({ id })),
+            ],
+          },
+          add: {
+            ...prevChanges.add,
+            team: [...(prevChanges.add.team || []), ...updatedTeams],
+          },
+        }));
 
-          return {
-            ...restSubcategories,
-            [selectedCategory?.SportID]: updatedSelectedSubcategories,
-            [newCategoryId]: updatedNewSubcategories,
-          };
-        });
+      } else {
+        console.error("Invalid item type");
+        return;
+      }
+    } catch (error) {
+      console.error(`Error moving ${itemType}:`, error);
+    }
+  };
+
+  const moveTeam = (itemType, item, newSubcategoryId, newCategoryId) => {
+    try {
+      if (itemType === "team") {
+        dispatch({ type: "DELETE_TEAM", payload: item.TeamID });
+        const updatedTeam = {
+          ...item,
+          LeagueID: newSubcategoryId,
+          SportID: newCategoryId,
+        };
+        dispatch({ type: "ADD_TEAM", payload: updatedTeam });
 
         setChanges((prevChanges) => ({
           ...prevChanges,
-          [changeType]: {
-            category: [],
-            subcategory:
-              itemType === "subcategory"
-                ? [{ ...item, newId: newCategoryId }]
-                : [],
-            team: itemType === "subcategory" ? [] : [],
+          add: {
+            ...prevChanges.add,
+            team: [...(prevChanges.add.team || []), updatedTeam],
+          },
+          delete: {
+            ...prevChanges.delete,
+            team: [...(prevChanges.delete.team || []), { id: item.TeamID }],
           },
         }));
-      } else if (itemType === "team") {
-        const newSubcategoryId = newId;
-
-        if (!teams[newSubcategoryId]) {
-          const teamsData = await TeamService.getTeams(newSubcategoryId);
-          setTeams((prevTeams) => ({
-            ...prevTeams,
-            [newSubcategoryId]: teamsData,
-          }));
-        }
-
-        setTeams((prevTeams) => {
-          const updatedTeams = { ...prevTeams };
-
-          updatedTeams[selectedSubcategory?.LeagueID] = updatedTeams[
-            selectedSubcategory?.LeagueID
-          ].filter((t) => t.TeamID !== item.TeamID);
-
-          updatedTeams[newSubcategoryId] = [
-            { ...item, LeagueID: newSubcategoryId },
-            ...(updatedTeams[newSubcategoryId] || []),
-          ];
-
-          return updatedTeams;
-        });
-
-        setChanges((prevChanges) => ({
-          ...prevChanges,
-          [changeType]: {
-            category: [],
-            subcategory: [],
-            team:
-              itemType === "team" ? [{ ...item, newId: newSubcategoryId }] : [],
-          },
-        }));
+      } else {
+        console.error("Invalid item type");
+        return;
       }
     } catch (error) {
       console.error(`Error moving ${itemType}:`, error);
@@ -466,47 +341,28 @@ export const IAPage = () => {
         return;
       }
 
-      if (changes.add.category.length > 0) {
-        await Promise.all(
-          changes.add.category.map(CategoryService.createCategory)
-        );
+      if (changes.add.category.length > 0) { 
+        await Promise.all(changes.add.category.map(CategoryService.createCategory));
       }
 
       if (changes.edit.category.length > 0) {
-        await Promise.all(
-          changes.edit.category.map((item) =>
-            CategoryService.updateCategory(item.SportID, item)
-          )
-        );
+        await Promise.all(changes.edit.category.map((item) => CategoryService.updateCategory(item.SportID, item)));
       }
 
       if (changes.delete.category.length > 0) {
-        await Promise.all(
-          changes.delete.category.map((item) =>
-            CategoryService.deleteCategory(item.id)
-          )
-        );
+        await Promise.all(changes.delete.category.map((item) => CategoryService.deleteCategory(item.id)));
       }
+
       if (changes.add.subcategory.length > 0) {
-        await Promise.all(
-          changes.add.subcategory.map(SubcategoryService.createSubcategory)
-        );
+        await Promise.all(changes.add.subcategory.map(SubcategoryService.createSubcategory));
       }
 
       if (changes.edit.subcategory.length > 0) {
-        await Promise.all(
-          changes.edit.subcategory.map((item) =>
-            SubcategoryService.updateSubcategory(item.LeagueID, item)
-          )
-        );
+        await Promise.all(changes.edit.subcategory.map((item) => SubcategoryService.updateSubcategory(item.LeagueID, item)));
       }
 
       if (changes.delete.subcategory.length > 0) {
-        await Promise.all(
-          changes.delete.subcategory.map((item) =>
-            SubcategoryService.deleteSubcategory(item.id)
-          )
-        );
+        await Promise.all(changes.delete.subcategory.map((item) => SubcategoryService.deleteSubcategory(item.id)));
       }
 
       if (changes.add.team.length > 0) {
@@ -514,18 +370,17 @@ export const IAPage = () => {
       }
 
       if (changes.edit.team.length > 0) {
-        await Promise.all(
-          changes.edit.team.map((item) =>
-            TeamService.updateTeam(item.TeamID, item)
-          )
-        );
+        await Promise.all(changes.edit.team.map((item) => TeamService.updateTeam(item.TeamID, item)));
       }
 
       if (changes.delete.team.length > 0) {
-        await Promise.all(
-          changes.delete.team.map((item) => TeamService.deleteTeam(item.id))
-        );
+        await Promise.all(changes.delete.team.map((item) => TeamService.deleteTeam(item.id)));
       }
+
+      setFlashMessage({
+        title: "Saved!",
+        description: "Information architecture is successfully saved!",
+      });
 
       setChanges({
         add: {
@@ -544,8 +399,7 @@ export const IAPage = () => {
           team: [],
         },
       });
-
-      console.log("Changes successfully applied on the server");
+  
     } catch (error) {
       console.error("Error applying changes on the server:", error);
     }
@@ -556,104 +410,107 @@ export const IAPage = () => {
       applyChangesOnServer();
       dispatch(setSaveButtonClicked(false));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [saveButtonClicked, dispatch]);
 
   return (
     <Styled.IABox>
       {flashMessage && (
         <FlashMessage
+          type={"success"}
           title={flashMessage.title}
           description={flashMessage.description}
           onClose={() => setFlashMessage(null)}
         />
       )}
       <Styled.AddSection>
-        <CreateItem
+        <IACreateItem
           itemType="category"
           onPress={(itemType, ItemName) => createItem(itemType, ItemName)}
         />
-        <CreateItem
-          itemType="subcategory"
-          onPress={(itemType, ItemName) => createItem(itemType, ItemName)}
-        />
-        <CreateItem
-          itemType="team"
-          onPress={(itemType, ItemName) => createItem(itemType, ItemName)}
-        />
+        {selectedCategory && (
+          <IACreateItem
+            itemType="subcategory"
+            onPress={(itemType, ItemName) =>createItem(itemType, ItemName, selectedCategory)}
+          />
+        )}
+        {selectedCategory && selectedSubcategory && (
+          <IACreateItem
+            itemType="team"
+            onPress={(itemType, ItemName) => createItem(itemType, ItemName, selectedCategory, selectedSubcategory)}
+          />
+        )}
       </Styled.AddSection>
+
       <Styled.ItemsSection>
         <Styled.ItemsGroup>
           {categories.map((x, index) => (
             <IAMenu
               key={index}
+              item={x}
               name={x.SportName}
               itemType="category"
-              isActive={
-                selectedCategory && selectedCategory.SportID === x.SportID
-              }
+              isActive={selectedCategory && selectedCategory.SportID === x.SportID}
+              isHidden={x.isHidden}
               categories={categories}
-              item={x}
               selectedCategory={selectedCategory}
-              onPress={() => showSubcategories(x)}
-              onDelete={() => deleteItem("category", x.SportID)}
+              setSelectedCategory={setSelectedCategory}
+              onPress={() => getSubcategories(x)}
               onEdit={(newName) => editItem("category", x.SportID, newName)}
-              onPressChangeVisibility={() =>
-                changeItemVisibility("category", x)
-              }
+              onDelete={() => deleteItem("category", x.SportID)}
+              onPressChangeVisibility={() =>changeItemVisibility("category", x)}
             />
           ))}
         </Styled.ItemsGroup>
-        {subcategories[selectedCategory?.SportID] && (
+
+        {subcategories.find((subcategory) => subcategory.SportID === selectedCategory?.SportID) && (
           <Styled.ItemsGroup>
-            {subcategories[selectedCategory?.SportID].map((x, index) => (
-              <IAMenu
-                key={index}
-                name={x.LeagueName}
-                item={x}
-                categories={categories}
-                subcategories={subcategories}
-                itemType="subcategory"
-                selectedCategory={selectedCategory}
-                setSelectedSubcategory={setSelectedSubcategory}
-                isActive={selectedSubcategory?.LeagueID === x.LeagueID}
-                onPress={() => loadTeams(x)}
-                onDelete={() => deleteItem("subcategory", x.LeagueID)}
-                onEdit={(newName) =>
-                  editItem("subcategory", x.LeagueID, newName)
-                }
-                onPressChangeVisibility={() =>
-                  changeItemVisibility("subcategory", x)
-                }
-                onPressToMove={(newCategoryId) =>
-                  moveItem("subcategory", x, newCategoryId)
-                }
-              />
-            ))}
+            {subcategories
+              .filter((subcategory) =>subcategory.SportID === selectedCategory?.SportID)
+              .map((x, index) => (
+                <IAMenu
+                  key={index}
+                  name={x.LeagueName}
+                  item={x}
+                  categories={categories}
+                  subcategories={subcategories}
+                  itemType="subcategory"
+                  selectedCategory={selectedCategory}
+                  setSelectedSubcategory={setSelectedSubcategory}
+                  isActive={selectedSubcategory?.LeagueID === x.LeagueID}
+                  isHidden={x.isHidden}
+                  onPress={() => getTeams(x)}
+                  onEdit={(newName) => editItem("subcategory", x.LeagueID, newName)}
+                  onDelete={() => deleteItem("subcategory", x.LeagueID)}
+                  onPressChangeVisibility={() => changeItemVisibility("subcategory", x)}
+                  onPressToMove={(newCategoryId) => moveSubcategory("subcategory", x, newCategoryId)}
+                />
+              ))}
           </Styled.ItemsGroup>
         )}
 
-        {teams[selectedSubcategory?.LeagueID] && (
+        {teams.find(
+          (team) => team.LeagueID === selectedSubcategory?.LeagueID) && (
           <Styled.ItemsGroup>
-            {teams[selectedSubcategory?.LeagueID].map((x, index) => (
-              <IAMenu
-                key={index}
-                name={x.TeamName}
-                item={x}
-                itemType="team"
-                categories={categories}
-                subcategories={subcategories}
-                selectedCategory={selectedCategory}
-                selectedSubcategory={selectedSubcategory}
-                isActive={false}
-                onDelete={() => deleteItem("team", x.TeamID)}
-                onEdit={(newName) => editItem("team", x.TeamID, newName)}
-                onPressChangeVisibility={() => changeItemVisibility("team", x)}
-                onPressToMove={(newSubcategoryId) =>
-                  moveItem("team", x, newSubcategoryId)
-                }
-              />
-            ))}
+            {teams
+              .filter((team) => team.LeagueID === selectedSubcategory?.LeagueID)
+              .map((x, index) => (
+                <IAMenu
+                  key={index}
+                  name={x.TeamName}
+                  item={x}
+                  itemType="team"
+                  categories={categories}
+                  subcategories={subcategories}
+                  selectedCategory={selectedCategory}
+                  selectedSubcategory={selectedSubcategory}
+                  isActive={false}
+                  isHidden={x.isHidden}
+                  onEdit={(newName) => editItem("team", x.TeamID, newName)}
+                  onDelete={() => deleteItem("team", x.TeamID)}
+                  onPressChangeVisibility={() => changeItemVisibility("team", x)}
+                  onPressToMove={(newSubcategoryId, newCategoryId) => moveTeam("team", x, newSubcategoryId, newCategoryId)}
+                />
+              ))}
           </Styled.ItemsGroup>
         )}
       </Styled.ItemsSection>

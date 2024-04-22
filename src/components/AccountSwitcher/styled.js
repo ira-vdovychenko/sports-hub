@@ -1,9 +1,9 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const SwitchBox = styled.div`
-    padding: 0 30px;
-    display: flex;
-    align-items: center;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
 `;
 
 export const SwitchButton = styled.button`
@@ -28,7 +28,7 @@ export const Tooltip = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -38,20 +38,18 @@ export const Tooltip = styled.div`
   color: white;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
 `;
 
 export const TooltipArrow = styled.div`
   position: absolute;
   content: " ";
-  bottom: 100%;  
+  bottom: 100%;
   left: 50%;
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent #313541 transparent;
 `;
-
-
-
-

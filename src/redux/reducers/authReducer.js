@@ -7,7 +7,7 @@ const initialState = {
   isPasswordChangeSuccess: false,
 };
 
-const authReducer = (state = initialState, action) => {
+export const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_USER":
       return {
@@ -49,4 +49,4 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-export default authReducer;
+

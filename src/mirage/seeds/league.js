@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-export default function createLeagues(server, sport) {
+export function createLeagues(server, sport) {
   const leagueNames = ['AFC East', 'AFC West', 'AFC North', 'AFC South'];
 
   return leagueNames.map((leagueName) => {

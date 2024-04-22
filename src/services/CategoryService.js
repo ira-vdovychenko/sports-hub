@@ -1,76 +1,68 @@
 export const getCategories = async () => {
-  const res = await fetch('/mirage-api/sports');
-  return await res.json();
-  };
-  
-export const createCategory = async (categoryData) => {
   try {
-    console.log('Creating category:', categoryData);
-    const res = await fetch('/mirage-api/sports', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(categoryData),
-    });
-
+    const res = await fetch('/mirage-api/sports');
+    
     if (!res.ok) {
-      throw new Error('Failed to create category');
+      throw new Error('Failed to fetch categories');
     }
-
-    if (res.status !== 201) {
-      const data = await res.json();
-      console.log('Response data:', data);
-    }
-
-    return res.json();
+    
+    return await res.json();
   } catch (error) {
-    console.error('Error creating category:', error);
+    console.error('Error fetching categories:', error);
     throw error;
   }
 };
 
-
-export const updateCategory = async (SportID, categoryData) => {
+export const createCategory = async (categoryData) => {
   try {
-    console.log('Updating category:', categoryData);
-    
-    const res = await fetch(`/mirage-api/sports/${SportID}`, {
-      method: 'PUT',
+    const res = await fetch("/mirage-api/sports", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(categoryData),
     });
 
     if (!res.ok) {
-      throw new Error('Failed to edit category');
-    }
-
-    if  (res.status !== 200 && res.status !== 204)  {
-      const data = await res.json();
-      console.log('Response data:', data);
+      throw new Error("Failed to create category");
     }
 
     return res.json();
   } catch (error) {
-    console.error('Error editing category:', error);
+    console.error("Error creating category:", error);
+    throw error;
+  }
+};
+
+export const updateCategory = async (SportID, categoryData) => {
+  try {
+    const res = await fetch(`/mirage-api/sports/${SportID}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(categoryData),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to edit category");
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error("Error editing category:", error);
     throw error;
   }
 };
 
 export const deleteCategory = async (SportID) => {
-console.log('Deleting category with ID:', SportID);
-return await fetch(`/mirage-api/sports/${SportID}`, {
-  method: 'DELETE',
-}).then((res) => {
-  if (!res.ok) {
-    throw new Error('Failed to delete category');
-  }
-  if (res.status !== 204) {
-    console.log('Response status:', res.status);
-  }
+  return await fetch(`/mirage-api/sports/${SportID}`, {
+    method: "DELETE",
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error("Failed to delete category");
+    }
 
-  return res;
-});
+    return null;
+  });
 };

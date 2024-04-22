@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch  } from "react-redux";
 import { setSaveButtonClicked } from "../../../../redux/actions/iaActions";
-import { LogInButton } from "../../../../components/Buttons/LogIn/LogInButton";
+import { SmallButton } from "../../../../components/Buttons/index";
 import * as Styled from "./styled";
 
 export const IAHeader = () => {
@@ -15,14 +15,13 @@ export const IAHeader = () => {
     <Styled.IAHeaderBox>
       <Styled.IAHeaderTitle>Information Architecture</Styled.IAHeaderTitle>
       <Styled.IAHeaderButtonBox>
-        <LogInButton
-          color="#FFF"
-          backgroundcolor="#D72130"
-          width="134px"
+        <SmallButton
+          size="134px"
+          buttonStyle={{fontWeight: '600'}}
           onClick={handleSaveButtonClick}
         >
           Save
-        </LogInButton>
+        </SmallButton>
       </Styled.IAHeaderButtonBox>
     </Styled.IAHeaderBox>
   );

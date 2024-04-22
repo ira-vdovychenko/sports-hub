@@ -13,7 +13,7 @@ export const PopupContainer = styled.div`
 
 export const PopupContent = styled.div`
   max-width: 458px;
-  height: 260px;
+  height: ${props => props.height || '260px'};
   position: relative;
   top: 20%;
   margin: auto;
@@ -22,11 +22,11 @@ export const PopupContent = styled.div`
 `;
 
 export const PopupTitle = styled.h2`
-  padding-top: ${props => props.paddingTop || '42px'};
-  font-family: 'Open Sans', serif;
+  padding-top: 42px;
+  font-family: Open Sans, sans-serif; 
   font-style: normal;
-  font-weight: ${props => props.fontWeight || 600};
-  font-size: ${props => props.fontSize || '24px'};
+  font-weight: 600;
+  font-size: 24px;
   line-height: normal;
   text-align: center;
   color: #000000;
@@ -34,7 +34,7 @@ export const PopupTitle = styled.h2`
 export const PopupDescription = styled.h2`
   color: #000;
   text-align: center;
-  font-family: Open Sans;
+  font-family: Open Sans, sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -52,7 +52,7 @@ export const PopupInputBox = styled.div`
 `;
 export const PopupLabel = styled.label`
   margin-left: 55px;
-  font-family: Roboto;
+  font-family: Roboto, sans-serif;
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
@@ -66,7 +66,7 @@ export const SubmitButtonBox = styled.div`
   margin: 0;
   padding: 0;
   position: absolute;
-  bottom: 17px;
+  bottom: 37px;
   right: 52px;
 
 `;
@@ -74,14 +74,22 @@ export const CancelButtonBox = styled.div`
   margin: 0;
   padding: 0;
   position: absolute;
-  bottom: 22px;
+  bottom: 42px;
   left: 228px;
 `;
 
 export const Icon = styled.span`
    position: absolute;
-  top: -15%;
+  top: -16%;
   left: 50%;
   transform: translateX(-50%);
   width: 20%;
+`;
+
+export const PopupCloseIcon = styled.span`
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    width: 10px;
+    height: 10px;
 `;

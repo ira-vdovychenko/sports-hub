@@ -1,11 +1,8 @@
 import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { RegisterForm, LogInForm, ResetPasswordForm, ForgotPasswordForm } from "./index";
+import { LogoButton } from "../../components/Buttons/index";
 import * as Styled from "./styled";
-import { RegisterForm } from "../../components/Forms/Registration/RegisterForm";
-import { ForgotPasswordForm } from "../../components/Forms/ForgotPassword/ForgotPasswordForm";
-import { ResetPasswordForm } from "../../components/Forms/ResetPassword/ResetPasswordForm";
-import { LogInForm } from "../../components/Forms/LogIn/LogInForm";
-import { LogoButton } from "../../components/Buttons/Logo/LogoButton";
 
 export const AuthPage = () => {
   const navigate = useNavigate();

@@ -1,8 +1,12 @@
 import { Server, Model, hasMany, belongsTo } from "miragejs";
 import { Response } from "miragejs";
-import createSports from "./seeds/sport.js";
-import createLeagues from "./seeds/league.js";
-import createTeams from "./seeds/team.js";
+import { createSports } from "./seeds/sport.js";
+import { createLeagues } from "./seeds/league.js";
+import { createTeams } from "./seeds/team.js";
+import { createLocations } from "./seeds/location.js";
+import { createCountries } from "./seeds/country.js";
+import { createStates } from "./seeds/state.js";
+import { createCities } from "./seeds/city.js";
 import { v4 as uuidv4 } from "uuid";
 
 export function makeServer({ environment = "development" } = {}) {
@@ -22,6 +26,7 @@ export function makeServer({ environment = "development" } = {}) {
       team: Model.extend({
         leagues: belongsTo(),
         sport: belongsTo(),
+        location: belongsTo(),
       }),
 
       User: Model.extend({
@@ -29,14 +34,47 @@ export function makeServer({ environment = "development" } = {}) {
       }),
 
       role: Model.extend({}),
+
+      country: Model.extend({
+        states: hasMany(),
+        cities: hasMany(),
+        locations: hasMany(),
+      }),
+
+      state: Model.extend({
+        cities: hasMany(),
+        country: belongsTo(),
+      }),
+
+      city: Model.extend({
+        locations: hasMany(),
+        state: belongsTo(),
+      }),
+
+      location: Model.extend({
+        teams: hasMany(),
+        city: belongsTo(),
+      }),
     },
 
     seeds(server) {
+      createCountries(server);
+      createStates(server);
+      createCities(server);
+      createLocations(server);
+
+      const sports = createSports(server);
+      sports.forEach((sport) => {
+        createLeagues(server, sport);
+      });
+      createTeams(server);
+
       const adminRole = server.create("role", {
         RoleID: 1,
         RoleName: "admin",
         RoleDescription: "Administrator",
       });
+
       const userRole = server.create("role", {
         RoleID: 2,
         RoleName: "user",
@@ -81,6 +119,12 @@ export function makeServer({ environment = "development" } = {}) {
       this.namespace = "/mirage-api";
 
       this.passthrough((request) => {
+        return request.url.startsWith("https://api.mapbox.com/");
+      });
+      this.passthrough((request) => {
+        return request.url.startsWith("https://events.mapbox.com/");
+      });
+      this.passthrough((request) => {
         return request.url === "http://localhost:8080/api/send-email";
       });
 
@@ -94,6 +138,10 @@ export function makeServer({ environment = "development" } = {}) {
 
       this.passthrough((request) => {
         return request.url === "http://localhost:8080/api/verify-token";
+      });
+
+      this.passthrough((request) => {
+        return request.url === "http://localhost:8080/api/logout";
       });
 
       this.get("/sports", (schema) => {
@@ -158,8 +206,20 @@ export function makeServer({ environment = "development" } = {}) {
         return new Response(204);
       });
 
-      this.get("/teams", (schema) => {
-        return schema.teams.all();
+      this.get("/all-teams", async (schema) => {
+        const teams = schema.teams.all().models.map((team) => {
+          return {
+            TeamID: team.TeamID,
+            TeamName: team.TeamName,
+            LocationID: team.LocationID,
+            LeagueID: team.LeagueID,
+            SportID: team.SportID,
+            logo: team.logo,
+            date: team.date,
+          };
+        });
+
+        return teams;
       });
 
       this.get("/teams/:LeagueID", (schema, request) => {
@@ -185,7 +245,7 @@ export function makeServer({ environment = "development" } = {}) {
         return updatedTeam;
       });
 
-      this.delete("/teams/:TeamId", (schema, request) => {
+      this.delete("/teams/:TeamID", (schema, request) => {
         const id = request.params.TeamID;
         const teams = schema.teams.where({ TeamID: id });
         if (!teams) {
@@ -197,9 +257,7 @@ export function makeServer({ environment = "development" } = {}) {
 
       this.post("/check-email", (schema, request) => {
         const { email } = JSON.parse(request.requestBody);
-
         const existingUser = schema.users.findBy({ Email: email });
-
         if (existingUser) {
           return new Response(
             400,
@@ -207,7 +265,6 @@ export function makeServer({ environment = "development" } = {}) {
             { error: "User with this email already exists." }
           );
         }
-
         return { emailExists: false };
       });
 
@@ -229,9 +286,7 @@ export function makeServer({ environment = "development" } = {}) {
 
       this.post("/register", (schema, request) => {
         const userData = JSON.parse(request.requestBody);
-
         const existingUser = schema.users.findBy({ Email: userData.Email });
-
         if (existingUser) {
           return new Response(
             400,
@@ -276,7 +331,7 @@ export function makeServer({ environment = "development" } = {}) {
       this.post("/change-password", (schema, request) => {
         const { newPassword, email } = JSON.parse(request.requestBody);
         const user = schema.users.findBy({ Email: email });
-      
+
         if (!user) {
           return new Response(
             404,
@@ -284,25 +339,20 @@ export function makeServer({ environment = "development" } = {}) {
             { error: "User not found." }
           );
         }
-      
+
         user.update({ EncryptedPassword: newPassword });
-      
+
         return { success: true, message: "Password changed successfully." };
       });
 
       this.get("/users", (schema) => {
         return schema.users.all().models.map((user) => user.attrs);
       });
-    },
-  });
 
-  const sports = createSports(server);
-  sports.forEach((sport) => {
-    createLeagues(server, sport);
-    const leagues = server.db.leagues.where({ SportID: sport.SportID });
-    leagues.forEach((league) => {
-      createTeams(server, league, sport);
-    });
+      this.get("/locations", (schema) => {
+        return schema.locations.all();
+      });
+    },
   });
 
   return server;

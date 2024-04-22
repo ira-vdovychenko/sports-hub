@@ -7,6 +7,7 @@ let refreshingToken = false;
 
 export const authMiddleware = (store) => (next) => (action) => {
   const token = store.getState().auth.token;
+
   if (!token) {
     return next(action);
   }
@@ -14,11 +15,6 @@ export const authMiddleware = (store) => (next) => (action) => {
   const tokenTime = jwtDecode(token);
   const tokenExpirationTime = moment.unix(tokenTime.exp);
   const currentTime = moment();
-
-  console.log(
-    "Token is expired or about to expire:",
-    tokenExpirationTime.diff(currentTime, "seconds") < 10
-  );
 
   if (tokenExpirationTime.diff(currentTime, "seconds") < 10 && !refreshingToken) {
     refreshingToken = true; 
@@ -38,6 +34,9 @@ export const authMiddleware = (store) => (next) => (action) => {
       .catch((error) => {
         console.error("Error refreshing token:", error);
         store.dispatch(logout());
+        localStorage.removeItem("tokenExpirationTime");
+        localStorage.removeItem("accessToken");
+     
         refreshingToken = false; 
       });
   }

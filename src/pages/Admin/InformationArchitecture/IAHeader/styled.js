@@ -1,6 +1,6 @@
-import Styled from "styled-components";
+import styled from "styled-components";
 
-export const IAHeaderBox = Styled.div`
+export const IAHeaderBox = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -8,7 +8,7 @@ export const IAHeaderBox = Styled.div`
     width: 100%;
 `;
 
-export const IAHeaderTitle = Styled.p`
+export const IAHeaderTitle = styled.p`
     color: #000;
     font-family: Open Sans;
     font-size: 30px;
@@ -19,7 +19,7 @@ export const IAHeaderTitle = Styled.p`
     margin-left: 101px;
 `;
 
-export const IAHeaderButtonBox = Styled.div`
+export const IAHeaderButtonBox = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;

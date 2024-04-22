@@ -2,17 +2,19 @@ import { createStore, applyMiddleware} from 'redux';
 import rootReducer from './reducers/index.js'; 
 import { authMiddleware } from './middleware/authMiddleware.js';
 
-const persistedUser = localStorage.getItem('user');
-const persistedToken = localStorage.getItem('accessToken');
-const persistedisAdmin = localStorage.getItem('isAdmin');
+const savedUser = localStorage.getItem('user');
+const savedRole = localStorage.getItem('role');
+const savedToken = localStorage.getItem('accessToken');
+const savedisAdmin = localStorage.getItem('isAdmin');
 
 const initialState = {
   auth: {
-    user: persistedUser ? JSON.parse(persistedUser) : null,
-    token: persistedToken || null,
-    isAdmin: persistedisAdmin || null, 
+    user: savedUser ? JSON.parse(savedUser) : null,
+    token: savedToken || null,
+    role: savedRole || null,
+    isAdmin: savedisAdmin || null, 
   }, 
 };
 const store = createStore(rootReducer, initialState, applyMiddleware(authMiddleware));
-console.log('Initial state:', store.getState());
+
 export default store;
