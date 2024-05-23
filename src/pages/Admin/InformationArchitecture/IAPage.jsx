@@ -57,7 +57,7 @@ export const IAPage = () => {
       }
     };
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   const getSubcategories = (category) => {
     setSelectedCategory(category);
@@ -346,7 +346,7 @@ export const IAPage = () => {
       }
 
       if (changes.edit.category.length > 0) {
-        await Promise.all(changes.edit.category.map((item) => CategoryService.updateCategory(item.SportID, item)));
+        await Promise.all(changes.edit.category.map((item) => CategoryService.updateCategory(item.SportID, item, token)));
       }
 
       if (changes.delete.category.length > 0) {
@@ -354,7 +354,7 @@ export const IAPage = () => {
       }
 
       if (changes.add.subcategory.length > 0) {
-        await Promise.all(changes.add.subcategory.map(SubcategoryService.createSubcategory));
+        await Promise.all(changes.edit.category.map((item) => CategoryService.updateCategory(item.SportID, item)));
       }
 
       if (changes.edit.subcategory.length > 0) {
@@ -430,7 +430,7 @@ export const IAPage = () => {
         {selectedCategory && (
           <IACreateItem
             itemType="subcategory"
-            onPress={(itemType, ItemName) =>createItem(itemType, ItemName, selectedCategory)}
+            onPress={(itemType, ItemName) => createItem(itemType, ItemName, selectedCategory)}
           />
         )}
         {selectedCategory && selectedSubcategory && (

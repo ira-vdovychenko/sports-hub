@@ -34,7 +34,7 @@ export const IACreateItem = ({ itemType, onPress }) => {
   return (
     <>
       <Styled.AddButtonBox>
-        <SmallTextButton $isCreateItemButton onClick={handleButtonClick}>
+        <SmallTextButton $isCreateItemButton onClick={handleButtonClick} >
           {buttonTexts[itemType]}
         </SmallTextButton>
         {isVisible && (

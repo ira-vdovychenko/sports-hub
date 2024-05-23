@@ -1,10 +1,10 @@
 import React from "react";
-import { ReactComponent as ErrorIcon } from "../../assets/flash-error-icon.svg";
-import { ReactComponent as SuccessIcon } from "../../assets/successicon.svg";
+/* import { ReactComponent as ErrorIcon } from "../../assets/flash-error-icon.svg";
+import { ReactComponent as SuccessIcon } from "../../assets/successicon.svg"; */
 import { FlashMessage } from "./FlashMessage.jsx";
 
 export default {
-  title: "FlashMessage",
+  title: "Components/FlashMessage",
   component: FlashMessage,
   tags: ["autodocs"],
   decorators: [

@@ -34,9 +34,11 @@ export const authMiddleware = (store) => (next) => (action) => {
       .catch((error) => {
         console.error("Error refreshing token:", error);
         store.dispatch(logout());
-        localStorage.removeItem("tokenExpirationTime");
         localStorage.removeItem("accessToken");
-     
+        localStorage.removeItem("user");
+        localStorage.removeItem("role");
+        localStorage.removeItem("isAdmin");
+        localStorage.removeItem("tokenExpirationTime");
         refreshingToken = false; 
       });
   }

@@ -14,6 +14,7 @@ export default Model.extend({
   isHidden: false,
   sport: belongsTo(),
   teams: hasMany(),
+  users: belongsTo(),
 });
 
 

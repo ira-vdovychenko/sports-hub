@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addTeam, updateTeam, deleteTeam, loadTeams, loadLocations, addLocation, setSelectedTeamForEdit, setSelectedTeamForDelete, setAddTeamButtonClicked, clearMapLocation} from "../../../redux/actions/teamActions.js";
+import { addTeam, updateTeam, deleteTeam, loadTeams, loadLocations, addLocation, setSelectedTeamForEdit, setSelectedTeamForDelete, setAddTeamButtonClicked, clearMapLocation } from "../../../redux/actions/teamActions.js";
 import { loadCategories, loadSubcategories } from "../../../redux/actions/iaActions.js";
 import * as CategoryService from "../../../services/CategoryService.js";
 import * as SubcategoryService from "../../../services/SubcategoryService.js";
 import * as TeamService from "../../../services/TeamService.js";
-import { TeamsMap, TeamForm, TeamTable } from "./index.js";
+import { TeamsMap, TeamFormContainer, TeamTable } from "./index.js";
 import { FlashMessage } from "../../../components/FlashMessage/FlashMessage.jsx";
 import { Popup } from "../../../components/Popup/Popup.jsx";
 import { ReactComponent as NegativeIcon } from "../../../assets/popupnegative.svg";
@@ -15,90 +15,85 @@ import { v4 as uuidv4 } from "uuid";
 import * as Styled from "./styled";
 
 export const TeamsPage = () => {
-  const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
   const addTeamButtonClicked = useSelector((state) => state.team.addTeamButtonClicked);
   const mapLocation = useSelector((state) => state.team.mapLocation);
   const teams = useSelector((state) => state.team.teams);
   const selectedTeamForEdit = useSelector((state) => state.team.selectedTeamForEdit);
   const selectedTeamForDelete = useSelector((state) => state.team.selectedTeamForDelete);
+
   const [mode, setMode] = useState("default");
   const [filteredTeams, setFilteredTeams] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
-  const [selectedLocaionId, setSelectedLocationId] = useState("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(""); 
-  const [selectedTeamId, setSelectedTeamId] = useState(""); 
   const [isTeamEdited, setIsTeamEdited] = useState(false);
-  const [editingTeamInitialState, setEditingTeamInitialState] = useState({});
   const [currentEditingTeam, setCurrentEditingTeam] = useState({});
   const [nextEditingTeam, setNextEditingTeam] = useState({});
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [warningMessage, setWarningMessage] = useState(false);
   const [warningDeleteMessage, setWarningDeleteMessage] = useState(false);
-
-  const getInitialTeamData = () => ({
+  const [selectedId, setSelectedId] = useState({
+    locationId: "",
+    categoryId: "",
+    subcategoryId: "",
+    teamId: "",
+  });
+  const [teamData, setTeamData] = useState({
+    LocationName: "",
     LocationID: "",
-    LocationName: "All",
+    SportName: "",
     SportID: "",
-    SportName: "All",
+    LeagueName: "",
     LeagueID: "",
-    LeagueName: "All",
-    TeamID: "",
     TeamName: "",
-    date: new Date(),
+    TeamID: "",
+    date: "",
     logo: "",
   });
 
-  const [teamData, setTeamData] = useState(getInitialTeamData());
+  useEffect(() => {
+    if (mode === "add") {
+      setTeamData({
+        LocationName: "",
+        SportName: "",
+        LeagueName: "",
+        TeamName: "",
+      });
+    } else if (mode === "default") {
+      setTeamData({
+        LocationName: "All",
+        SportName: "All",
+        LeagueName: "All",
+        TeamName: "",
+      });
+    }
+  }, [mode]);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const locationsData = await TeamService.getLocations();
-        dispatch(loadLocations(locationsData));
+      const locationsData = await TeamService.getLocations();
+      dispatch(loadLocations(locationsData));
 
-        const categoriesData = await CategoryService.getCategories();
-        const categoriesArray = Object.values(categoriesData.sports);
-        dispatch(loadCategories(categoriesArray));
+      const categoriesData = await CategoryService.getCategories();
+      const categoriesArray = Object.values(categoriesData.sports);
+      dispatch(loadCategories(categoriesArray));
 
-        const subcategoriesData = await SubcategoryService.getSubcategories();      
-        dispatch(loadSubcategories(subcategoriesData));
+      const subcategoriesData = await SubcategoryService.getSubcategories();
+      dispatch(loadSubcategories(subcategoriesData));
 
-        const teamsData = await TeamService.getTeams();
-        dispatch(loadTeams(teamsData));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      const teamsData = await TeamService.getTeams();
+      dispatch(loadTeams(teamsData));
     };
 
     fetchData();
   }, [dispatch]);
-  
-  useEffect(() => {
-    if (mode === "default") {
-      setTeamData(getInitialTeamData());
-    }
-  }, [mode]);
 
   useEffect(() => {
     if (addTeamButtonClicked) {
       setIsFiltering(false);
       dispatch(setSelectedTeamForEdit(null));
       setMode("add");
-      setTeamData({
-        LocationID: "",
-        LocationName: "",
-        SportID: "",
-        SportName: "",
-        LeagueID: "",
-        LeagueName: "",
-        TeamID: "",
-        TeamName: "",
-        date: new Date(),
-        logo: "",
-      });
     }
   }, [addTeamButtonClicked]);
 
@@ -109,23 +104,8 @@ export const TeamsPage = () => {
     } else if (selectedTeamForEdit && !isTeamEdited) {
       setMode("edit");
       dispatch(setAddTeamButtonClicked(false));
+      setTeamData(selectedTeamForEdit);
       setIsFiltering(false);
-      const editTeamData = {
-        LocationID: selectedTeamForEdit.LocationID,
-        LocationName: selectedTeamForEdit.LocationName,
-        SportID: selectedTeamForEdit.SportID,
-        SportName: selectedTeamForEdit.SportName,
-        LeagueID: selectedTeamForEdit.LeagueID,
-        LeagueName: selectedTeamForEdit.LeagueName,
-        TeamID: selectedTeamForEdit.TeamID,
-        TeamName: selectedTeamForEdit.TeamName,
-        Longitude: selectedTeamForEdit.Longitude,
-        Latitude: selectedTeamForEdit.Latitude,
-        date: selectedTeamForEdit.date,
-        logo: selectedTeamForEdit.logo,
-      };
-      setTeamData(editTeamData);
-      setEditingTeamInitialState(editTeamData);
       setCurrentEditingTeam(selectedTeamForEdit);
       setNextEditingTeam({});
     }
@@ -162,24 +142,22 @@ export const TeamsPage = () => {
     dispatch(setSelectedTeamForDelete(null));
   };
 
-  const addTeamSubmit = async (e) => {
-    e.preventDefault();
+  const addTeamSubmit = async (values) => {
+    const { LocationID, SportID, LeagueID, TeamName, logo } = values;
     const addTeamData = {
-      LocationID: teamData.LocationID,
-      SportID: teamData.SportID,
-      LeagueID: teamData.LeagueID,
+      LocationID,
+      SportID,
+      LeagueID,
       TeamID: uuidv4(),
-      TeamName: teamData.TeamName,
-      date: teamData.date.toLocaleDateString("en-GB"),
-      logo: teamData.logo || "",
+      TeamName,
+      date: new Date().toLocaleDateString("en-GB"),
+      logo: logo || "",
     };
-
     try {
-      if (
-        !teamData.LocationID || !teamData.SportID || !teamData.LeagueID || !teamData.TeamName) {
+      if (!token) {
         return;
       }
-      if (!token) {
+      if (!addTeamData.LocationID || !addTeamData.SportID || !addTeamData.LeagueID || !addTeamData.TeamName) {
         return;
       }
       await TeamService.createTeam(addTeamData);
@@ -189,8 +167,7 @@ export const TeamsPage = () => {
       });
       dispatch(addTeam(addTeamData));
       dispatch(addLocation(addTeamData.LocationID));
-      setMode('default');
-      setTeamData(getInitialTeamData());
+      setMode("default");
       dispatch(setSelectedTeamForEdit(null));
       dispatch(setAddTeamButtonClicked(false));
       dispatch(clearMapLocation());
@@ -199,42 +176,32 @@ export const TeamsPage = () => {
     }
   };
 
-  const editTeamSubmit = async (e) => {
-    e.preventDefault();
-    const editTeamData = {
-      LocationID: teamData.LocationID,
-      SportID: teamData.SportID,
-      LeagueID: teamData.LeagueID,
-      TeamID: teamData.TeamID,
-      TeamName: teamData.TeamName,
-      date: teamData.date,
-      logo: teamData.logo || "",
-    };
-
-    try {
-      if (
-        !isTeamEdited ||
-        !teamData.LocationID ||
-        !teamData.SportID ||
-        !teamData.LeagueID ||
-        !teamData.TeamName
-      ) {
-        return;
-      }
-      if (!token) {
-        return;
-      }
-      await TeamService.updateTeam(teamData.TeamID, editTeamData);
+  const editTeamSubmit = async (values) => {
+      const { LocationName, LocationID, SportID, LeagueID, TeamID, TeamName, date, logo } = values;
+      const editTeamData = {
+        LocationName,
+        LocationID,
+        SportID,
+        LeagueID,
+        TeamID,
+        TeamName,
+        date,
+        logo: logo || "",
+      };
+      try {
+        if (!token) {
+          return;
+        }
+      await TeamService.updateTeam(TeamID, editTeamData);
       setSuccessMessage({
         title: "Your team is successfully updated",
         description: "The changes have been saved to your IA",
       });
-      dispatch(updateTeam(teamData.TeamID, teamData));
+      dispatch(updateTeam(TeamID, editTeamData));
       setIsTeamEdited(false);
       dispatch(setSelectedTeamForEdit(null));
-      setMode('default');
+      setMode("default");
       dispatch(clearMapLocation());
-      setTeamData(getInitialTeamData());
     } catch (error) {
       setErrorMessage(true);
     }
@@ -255,21 +222,39 @@ export const TeamsPage = () => {
   };
 
   const filterTeamsSubmit = () => {
-    const filteredTeams = teams.filter(team => {
-      const isLocationMatch = selectedLocaionId ? team.LocationID === selectedLocaionId : true;
-      const isCategoryMatch = selectedCategoryId ? team.SportID === selectedCategoryId : true;
-      const isSubcategoryMatch = selectedSubcategoryId ? team.LeagueID === selectedSubcategoryId : true;
-      const isTeamMatch = selectedTeamId ? team.TeamID === selectedTeamId : true;
-  
-      return isLocationMatch && isCategoryMatch && isSubcategoryMatch && isTeamMatch;
+    const filteredTeams = teams.filter((team) => {
+      const isLocationMatch = selectedId.locationId
+        ? team.LocationID === selectedId.locationId
+        : true;
+      const isCategoryMatch = selectedId.categoryId
+        ? team.SportID === selectedId.categoryId
+        : true;
+      const isSubcategoryMatch = selectedId.subcategoryId
+        ? team.LeagueID === selectedId.subcategoryId
+        : true;
+      const isTeamMatch = selectedId.teamId
+        ? team.TeamID === selectedId.teamId
+        : true;
+
+      return (
+        isLocationMatch && isCategoryMatch && isSubcategoryMatch && isTeamMatch
+      );
     });
     setFilteredTeams(filteredTeams);
     setIsFiltering(true);
   };
 
+  const handleSubmit = (values) => {
+    if (mode === "add") {
+      return addTeamSubmit(values);
+    } else if (mode === "edit") {
+      return editTeamSubmit(values);
+    } else {
+      return filterTeamsSubmit(values);
+    }
+  };
   const handleCancel = () => {
-    setMode('default');
-    setTeamData(getInitialTeamData());
+    setMode("default");
     setIsTeamEdited(false);
     dispatch(clearMapLocation());
     dispatch(setSelectedTeamForEdit(null));
@@ -282,9 +267,9 @@ export const TeamsPage = () => {
       {successMessage ? (
         <FlashMessage
           type={"success"}
-          width={"472px"} 
+          width={"472px"}
           $top={"230px"}
-          $right={'400px'}
+          $right={"400px"}
           title={successMessage.title}
           description={successMessage.description}
           onClose={() => setSuccessMessage(null)}
@@ -321,7 +306,13 @@ export const TeamsPage = () => {
           icon={<DeleteIcon />}
           title={"You are about to delete this team!"}
           titleStyle={{ fontSize: 14, fontWeight: 700, paddingTop: 76 }}
-          description={<>This team will be deleted from sub category<br />Are you sure?</>}
+          description={
+            <>
+              This team will be deleted from sub category
+              <br />
+              Are you sure?
+            </>
+          }
           showButtons={true}
           submitButton="Delete"
           cancelButton="Cancel"
@@ -331,38 +322,29 @@ export const TeamsPage = () => {
       )}
       <Styled.TeamBox>
         <Styled.TeamsMapBox>
-          <TeamsMap 
-          filteredTeams={filteredTeams}
-          isFiltering={isFiltering}
-          mapLocation={mapLocation}
-          addTeamButtonClicked={addTeamButtonClicked}
-          selectedTeamForEdit={selectedTeamForEdit}
+          <TeamsMap
+            filteredTeams={filteredTeams}
+            isFiltering={isFiltering}
+            mapLocation={mapLocation}
+            addTeamButtonClicked={addTeamButtonClicked}
+            selectedTeamForEdit={selectedTeamForEdit}
           />
         </Styled.TeamsMapBox>
         <Styled.TeamsFormBox>
-          <TeamForm
+          <TeamFormContainer
             mode={mode}
             teamData={teamData}
-            setTeamData={setTeamData}
-            setSelectedLocationId={setSelectedLocationId}
-            setSelectedCategoryId={setSelectedCategoryId}
-            setSelectedSubcategoryId={setSelectedSubcategoryId}
-            setSelectedTeamId={setSelectedTeamId}
-            isTeamEdited={isTeamEdited}
+            setSelectedId={setSelectedId}
             setIsTeamEdited={setIsTeamEdited}
-            editingTeamInitialState={editingTeamInitialState}
             addTeamButtonClicked={addTeamButtonClicked}
             mapLocation={mapLocation}
-            onSubmit={mode === "add" ? addTeamSubmit : (mode === "edit" ? editTeamSubmit : filterTeamsSubmit)}
+            onSubmitForm={handleSubmit}
             onCancel={handleCancel}
           />
         </Styled.TeamsFormBox>
       </Styled.TeamBox>
       <Styled.TeamsTableBox>
-        <TeamTable
-          filteredTeams={filteredTeams}
-          isFiltering={isFiltering}
-        />
+        <TeamTable filteredTeams={filteredTeams} isFiltering={isFiltering} />
       </Styled.TeamsTableBox>
     </Styled.TeamsContainer>
   );

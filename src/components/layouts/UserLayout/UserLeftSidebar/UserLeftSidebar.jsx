@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux"; 
 import * as CategoryService from "../../../../services/CategoryService.js";
 import * as SubcategoryService from "../../../../services/SubcategoryService.js";
 import * as TeamService from "../../../../services/TeamService.js";
@@ -8,9 +7,6 @@ import { ReactComponent as LineIcon } from '../../../../assets/left-menu-line.sv
 import * as Styled from "./styled.js";
 
 export const UserLeftSidebar = () => {
-  const categories = useSelector((state) => state.ia.categories);
-  const teams = useSelector((state) => state.team.teams);
-  const subcategories = useSelector((state) => state.ia.subcategories); 
   const navigate = useNavigate();
   const [categoriesData, setCategoriesData] = useState([]);
   const [subcategoriesData, setSubcategoriesData] = useState([]);
@@ -24,14 +20,10 @@ export const UserLeftSidebar = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      try {
-         if (categories && categories.length > 0) {
-          setCategoriesData(categories);
-        } else { 
+      try { 
           const categoriesFromServer = await CategoryService.getCategories();
           const categoriesArray = Object.values(categoriesFromServer.sports);
           setCategoriesData(categoriesArray);
-         } 
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -39,13 +31,9 @@ export const UserLeftSidebar = () => {
 
     const fetchSubcategories = async () => {
       try {
-         if (subcategories && subcategories.length > 0) {
-          setSubcategoriesData(subcategories);
-        } else { 
           const subcategoriesFromServer =
             await SubcategoryService.getSubcategories();
           setSubcategoriesData(subcategoriesFromServer);
-        } 
       } catch (error) {
         console.error("Error fetching subcategories:", error);
       }
@@ -53,12 +41,8 @@ export const UserLeftSidebar = () => {
 
     const fetchTeams = async () => {
       try {
-         if (teams && teams.length > 0) {
-          setTeamsData(teams);
-        } else { 
           const teamsFromServer = await TeamService.getTeams();
           setTeamsData(teamsFromServer);
-         } 
       } catch (error) {
         console.error("Error fetching teams:", error);
       }

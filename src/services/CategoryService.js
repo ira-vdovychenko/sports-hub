@@ -11,7 +11,26 @@ export const getCategories = async () => {
     console.error('Error fetching categories:', error);
     throw error;
   }
-};
+}; 
+/* export const getCategories = async (token) => {
+  console.log(token);
+  try {
+    const res = await fetch('/mirage-api/sports', {
+      headers: {
+        'Authorization': `Bearer ${token}` 
+      } 
+    });
+    
+    if (!res.ok) {
+      throw new Error('Failed to fetch categories');
+    }
+    
+    return await res.json();
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+}; */
 
 export const createCategory = async (categoryData) => {
   try {
@@ -53,7 +72,28 @@ export const updateCategory = async (SportID, categoryData) => {
     console.error("Error editing category:", error);
     throw error;
   }
-};
+}; 
+/* export const updateCategory = async (SportID, categoryData, token) => {
+  try {
+    const res = await fetch(`/mirage-api/sports/${SportID}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token 
+      },
+      body: JSON.stringify(categoryData),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to edit category");
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error("Error editing category:", error);
+    throw error;
+  }
+}; */
 
 export const deleteCategory = async (SportID) => {
   return await fetch(`/mirage-api/sports/${SportID}`, {

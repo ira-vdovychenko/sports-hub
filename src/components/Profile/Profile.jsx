@@ -10,19 +10,19 @@ import * as Styled from "./styled.js";
 export const Profile = () => {
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-  const isAdmin = useSelector(state => state.auth.isAdmin);
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const menuRef = useRef(null);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
- 
+
   const isAuthenticated = !!token;
 
   useEffect(() => {
     const isAdminLocal = localStorage.getItem("isAdmin");
-    if (isAdminLocal === 'true') {
+    if (isAdminLocal === "true") {
       dispatch(setAdmin(true));
-    } else if(isAdminLocal === 'false'){
+    } else if (isAdminLocal === "false") {
       dispatch(setAdmin(false));
     }
   }, []);
@@ -30,9 +30,9 @@ export const Profile = () => {
   const toggleProfileMenu = () => {
     setProfileMenuOpen(!isProfileMenuOpen);
   };
- 
+
   const handleLogout = async () => {
-    await removeToken();
+    await removeToken();  
     setProfileMenuOpen(false);
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
@@ -57,14 +57,18 @@ export const Profile = () => {
   }, []);
 
   return (
-    <Styled.ProfileContainer>
+    <Styled.ProfileContainer  data-testid="profile-container">
       {isAuthenticated && !isAdmin ? (
         <Styled.User ref={menuRef}>
           <Styled.UserImage src={ellipse} alt="User's Image" />
           <Styled.UserName>{user?.UserName}</Styled.UserName>
-          <Styled.DropDownSurvey>
-            <Styled.DropDownButton onClick={toggleProfileMenu}>
-              {isProfileMenuOpen ? <Styled.MenuUpIcon /> : <Styled.MenuDownIcon />}
+          <Styled.DropDownSurvey >
+            <Styled.DropDownButton onClick={toggleProfileMenu}  aria-label="Open profile menu">
+              {isProfileMenuOpen ? (
+                <Styled.MenuUpIcon />
+              ) : (
+                <Styled.MenuDownIcon />
+              )}
             </Styled.DropDownButton>
             {isProfileMenuOpen && (
               <Styled.DropDownSurveyList>
@@ -72,19 +76,39 @@ export const Profile = () => {
                   {user?.UserName}
                   <Styled.ItemEmail>{user?.Email}</Styled.ItemEmail>
                 </Styled.DropDownNameItem>
-                <Styled.DropDownSurveyItem to="/profile" onClick={() => setProfileMenuOpen(false)}>
-                  View profile
-                </Styled.DropDownSurveyItem>
-                <Styled.DropDownSurveyItem to="/profile/change-password" onClick={() => setProfileMenuOpen(false)}>
-                  Change password
-                </Styled.DropDownSurveyItem>
-                <Styled.DropDownSurveyItem to="/profile/surveys" onClick={() => setProfileMenuOpen(false)}>
-                  My surveys
-                </Styled.DropDownSurveyItem>
-                <Styled.DropDownSurveyItem  to="/profile/team-hub" onClick={() => setProfileMenuOpen(false)}>
-                  Team hub
-                </Styled.DropDownSurveyItem>
-                <Styled.DropDownSurveyItem onClick={handleLogout}>Log out</Styled.DropDownSurveyItem>
+                <Link to="/profile" style={{ textDecoration: "none" }}>
+                  <Styled.DropDownSurveyItem
+                    onClick={() => setProfileMenuOpen(false)}
+                  >
+                    View profile
+                  </Styled.DropDownSurveyItem>
+                </Link>
+                  <Link to="/profile/change-password" style={{ textDecoration: "none" }}>
+                  <Styled.DropDownSurveyItem
+                    onClick={() => setProfileMenuOpen(false)}
+                  >
+                    Change password
+                  </Styled.DropDownSurveyItem>
+                </Link>
+                  <Link to="/profile/surveys" style={{ textDecoration: "none" }}>
+                  <Styled.DropDownSurveyItem
+                    onClick={() => setProfileMenuOpen(false)}
+                  >
+                     My surveys
+                  </Styled.DropDownSurveyItem>
+                </Link>
+                  <Link to="/profile/team-hub" style={{ textDecoration: "none" }}>
+                  <Styled.DropDownSurveyItem
+                    onClick={() => setProfileMenuOpen(false)}
+                  >
+                     Team hub
+                  </Styled.DropDownSurveyItem>
+                </Link>
+                <Styled.DropDownSurveyLastItem
+                  onClick={handleLogout}
+                >
+                  Log out
+                </Styled.DropDownSurveyLastItem>
               </Styled.DropDownSurveyList>
             )}
           </Styled.DropDownSurvey>
@@ -94,17 +118,19 @@ export const Profile = () => {
           {!isAuthenticated && (
             <>
               <Link to="/register">
-                <SmallTextButton buttonStyle={{textAlign: 'center'}}>Sign up</SmallTextButton>
+                <SmallTextButton aria-label="sign-up" buttonStyle={{ textAlign: "center" } }>
+                  Sign up
+                </SmallTextButton>
               </Link>
-              <Link to="/login" style={{ textDecoration: 'none' }}>
-                <SecondarySmallButton>Log in</SecondarySmallButton>
+              <Link to="/login" style={{ textDecoration: "none" }} >
+                <SecondarySmallButton aria-label="log-in" >Log in</SecondarySmallButton>
               </Link>
             </>
           )}
         </>
       )}
       {isAuthenticated && isAdmin && (
-        <Styled.User>
+        <Styled.User  ref={menuRef}>
           <Styled.UserImage src={ellipse} alt="User's Image" />
           <Styled.UserName>
             {user?.UserName}
@@ -112,7 +138,11 @@ export const Profile = () => {
           </Styled.UserName>
           <Styled.DropDownSurvey>
             <Styled.DropDownButton onClick={toggleProfileMenu}>
-              {isProfileMenuOpen ? <Styled.MenuUpIcon /> : <Styled.MenuDownIcon />}
+              {isProfileMenuOpen ? (
+                <Styled.MenuUpIcon />
+              ) : (
+                <Styled.MenuDownIcon />
+              )}
             </Styled.DropDownButton>
             {isProfileMenuOpen && (
               <Styled.DropDownSurveyList>
@@ -120,7 +150,11 @@ export const Profile = () => {
                   {user?.UserName}
                   <Styled.ItemEmail>{user?.Email}</Styled.ItemEmail>
                 </Styled.DropDownNameItem>
-                <Styled.DropDownSurveyItem onClick={handleLogout}>Log out</Styled.DropDownSurveyItem>
+                <Styled.DropDownSurveyLastItem
+                  onClick={handleLogout}
+                >
+                  Log out
+                </Styled.DropDownSurveyLastItem>
               </Styled.DropDownSurveyList>
             )}
           </Styled.DropDownSurvey>

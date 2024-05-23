@@ -3,7 +3,7 @@ import { Popup } from "./Popup.jsx";
 import { ReactComponent as DeleteIcon } from "../../assets/popupdelete.svg";
 
 export default {
-  title: "Popup",
+  title: "Components/Popup",
   component: Popup,
   tags: ['autodocs'],
   decorators: [

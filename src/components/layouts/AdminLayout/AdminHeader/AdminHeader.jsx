@@ -22,14 +22,14 @@ export const AdminHeader = () => {
         </Styled.HeaderLogo>
         <Styled.UserMenu>
           <Styled.HeaderSwitch>
-            <AccountSwitcher />
+            <AccountSwitcher /> 
           </Styled.HeaderSwitch>
           <Styled.HeaderProfile>
-            <Profile />
+            <Profile /> 
           </Styled.HeaderProfile>
         </Styled.UserMenu>
       </Styled.HeaderNavbar>
-      <Styled.HeaderActivePage>
+       <Styled.HeaderActivePage>
         {location.pathname === "/admin/information-architecture" ? (
           <IAHeader />
         ) : location.pathname === "/admin/teams" ? (
@@ -38,7 +38,7 @@ export const AdminHeader = () => {
           <ActivePageName activePage={activePage} />
         )}
       </Styled.HeaderActivePage>
-      <HorizontalMenu setActivePage={setActivePage} /> 
+      <HorizontalMenu setActivePage={setActivePage} />  
     </Styled.Header>
   );
 };

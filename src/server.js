@@ -129,7 +129,6 @@ app.post("/api/logout", (req, res) => {
 
 function generateAccessToken(user) {
     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-    console.log(accessToken);
     return accessToken;
   } 
 

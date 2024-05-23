@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { ReactComponent as UpIcon } from "../../assets/UpIcon.svg";
 import { ReactComponent as DownIcon } from "../../assets/DownIcon.svg";
 
@@ -47,7 +46,7 @@ export const DropDownButton = styled.button`
 
 export const DropDownSurveyList = styled.div`
   width: fit-content;
-  min-width: 180px;
+  min-width: 178px;
   position: absolute;
   right: 0;
   top: 25px;
@@ -58,7 +57,7 @@ export const DropDownSurveyList = styled.div`
   z-index: 1100;
 `;
 
-export const DropDownSurveyItem = styled(Link)`
+export const DropDownSurveyItem = styled.button`
   display: flex;
   align-items: center;
   padding-left: 25px;
@@ -67,22 +66,23 @@ export const DropDownSurveyItem = styled(Link)`
   width: 100%;
   text-align: left;
   text-decoration: none;
+  border: none;
+  background-color: transparent;
   color: #000000;
   font-family: Open Sans, sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 16.34;
-
   &:hover {
     font-size: 14px;
     background-color: #d721301c;
     color: #C63638;
   }
+`;
 
-  &:last-child {
-    height: 51px; 
-    border-top: 1px solid #EDEDED;
-  }
+export const DropDownSurveyLastItem = styled(DropDownSurveyItem)`
+  height: 51px; 
+  border-top: 1px solid #EDEDED;
 `;
 
 export const DropDownNameItem = styled.div`
@@ -91,7 +91,6 @@ export const DropDownNameItem = styled.div`
   align-items: left;
   justify-content: center;
   padding-left: 25px;
-  padding-top: 22px;
   box-sizing: border-box;
   height: 70px;
   width: 100%;

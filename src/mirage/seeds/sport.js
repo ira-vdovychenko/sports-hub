@@ -8,7 +8,6 @@ export  function createSports(server) {
       SportID: uuidv4(),
       SportName: sport,
       isStatic: ['MORE', 'LIFESTYLE', 'DEALBOOK', 'VIDEO'].includes(sport),
-      
     });
   });
 };

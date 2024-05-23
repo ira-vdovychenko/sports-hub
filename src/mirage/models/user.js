@@ -10,7 +10,9 @@ export default Model.extend({
   Email: '',
   EncryptedPassword: '',
   roles: hasMany(),
-
+  sports: hasMany(),
+  leagues: hasMany(),
+  teams: hasMany(),
 });
 
 

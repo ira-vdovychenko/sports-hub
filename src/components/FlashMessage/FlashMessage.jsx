@@ -10,14 +10,14 @@ export const FlashMessage = ({ title, description, titleStyle, descriptionStyle,
       onClose();
     }
   };
-/* 
-   useEffect(() => {
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       handleClose();
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, []); */
+  }, []); 
  
   const icon = type === "success" ? <img src={SuccessIcon} alt="Success Icon" /> : <img src={ErrorIcon} alt="Error Icon" />;
   return (

@@ -1,4 +1,4 @@
-import { Model, hasMany } from 'miragejs';
+import { Model, belongsTo, hasMany } from 'miragejs';
 import { v4 as uuidv4 } from 'uuid';
 
 export default Model.extend({
@@ -10,6 +10,7 @@ export default Model.extend({
   isStatic: false,
   isHidden: false,
   leagues: hasMany(),
+  users: belongsTo(),
 });
 
 

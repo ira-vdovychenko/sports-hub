@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import { Form } from 'formik';
 import { ReactComponent as DownIcon } from "../../../../assets/DownIcon.svg";
 
-export const TeamsForm = styled.form`
+export const TeamsForm = styled(Form)`
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -96,6 +97,7 @@ export const DropdownItem = styled.div`
     background: rgba(215, 33, 48, 0.11);
   }
 `;
+
 export const DropDownMenuItemText = styled.h3`
   margin-left: 25px;
   text-align: left;

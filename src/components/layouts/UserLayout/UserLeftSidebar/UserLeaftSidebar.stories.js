@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ReactComponent as LineIcon } from "../../../../assets/left-menu-line.svg";
 
 export default {
-  title: "UserLeftSidebar",
+  title: "Components/UserLeftSidebar",
   tags: ["autodocs"],
   argTypes: {
     onClick: {

@@ -6,7 +6,7 @@ import zoomOutIconUrl from '../../../../../assets/map-icon.svg';
 import resetIconUrl from '../../../../../assets/maprefreshicon.svg'; 
 
 export const MapControls = () => {
-    const map = useMap();
+  const map = useMap();
 
   useEffect(() => {
     const addCustomControlIcon = (iconUrl, onClick, position) => {

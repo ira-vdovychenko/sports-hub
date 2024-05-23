@@ -13,6 +13,7 @@ export default Model.extend({
   league: belongsTo(),
   sport: belongsTo(),
   location: belongsTo(),
+  user: belongsTo(),
 });
 
 

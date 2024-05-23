@@ -12,7 +12,7 @@ import { ReactComponent as AdvertisingIcon } from "../../../../assets/leftmenu/A
 import * as Styled from "./styled";
 
 export default {
-  title: "AdminLeftSidebar",
+  title: "Components/AdminLeftSidebar",
   tags: ["autodocs"],
   decorators: [
     (Story) => (

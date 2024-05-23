@@ -12,7 +12,6 @@ export const SwitchButton = styled.button`
   position: relative;
   border: none;
   background: transparent;
-
   &:hover .tooltip {
     opacity: 1;
     visibility: visible;
@@ -21,7 +20,7 @@ export const SwitchButton = styled.button`
 
 export const Tooltip = styled.div`
   position: absolute;
-  top: calc(100% + 5px);
+  top: calc(100% + 15px);
   left: 50%;
   width: 173px;
   height: 48px;

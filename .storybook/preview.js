@@ -1,4 +1,7 @@
 /** @type { import('@storybook/react').Preview } */
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+
 const preview = {
   parameters: {
     controls: {
@@ -11,3 +14,11 @@ const preview = {
 };
 
 export default preview;
+
+export const decorators = [
+  (Story) => (
+    <Router>
+      <Story />
+    </Router>
+  ),
+];

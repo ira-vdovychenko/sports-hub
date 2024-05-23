@@ -9,48 +9,46 @@ import { createStates } from "./seeds/state.js";
 import { createCities } from "./seeds/city.js";
 import { v4 as uuidv4 } from "uuid";
 
-export function makeServer({ environment = "development" } = {}) {
+export default function makeServer({ environment = "development" } = {}) {
   let server = new Server({
     environment,
 
     models: {
       sport: Model.extend({
         leagues: hasMany(),
+        user: belongsTo(),
       }),
-
       league: Model.extend({
         teams: hasMany(),
         sport: belongsTo(),
+        user: belongsTo(),
       }),
-
       team: Model.extend({
         leagues: belongsTo(),
         sport: belongsTo(),
         location: belongsTo(),
+        user: belongsTo(),
       }),
-
-      User: Model.extend({
+      user: Model.extend({
         roles: hasMany(),
+        sports: hasMany(),
+        leagues: hasMany(),
+        teams: hasMany(),
       }),
-
       role: Model.extend({}),
-
       country: Model.extend({
         states: hasMany(),
         cities: hasMany(),
         locations: hasMany(),
       }),
-
       state: Model.extend({
         cities: hasMany(),
         country: belongsTo(),
       }),
-
       city: Model.extend({
         locations: hasMany(),
         state: belongsTo(),
       }),
-
       location: Model.extend({
         teams: hasMany(),
         city: belongsTo(),
@@ -66,7 +64,7 @@ export function makeServer({ environment = "development" } = {}) {
       const sports = createSports(server);
       sports.forEach((sport) => {
         createLeagues(server, sport);
-      });
+      }); 
       createTeams(server);
 
       const adminRole = server.create("role", {
@@ -81,18 +79,19 @@ export function makeServer({ environment = "development" } = {}) {
         RoleDescription: "Regular User",
       });
 
-      server.create("User", {
+      server.create("user", {
         UserID: uuidv4(),
         UserName: "Brandon Miles",
         RoleID: adminRole.RoleID,
         FirstName: "Brandon",
         LastName: "Miles",
         Email: "admin@example.com",
-        EncryptedPassword: "potyrds567",
+        EncryptedPassword: 'potyrds567',
         roles: [adminRole],
+       /*  sports: createSports(server), */
       });
-
-      server.create("User", {
+      
+      server.create("user", {
         UserID: uuidv4(),
         UserName: "Ivan Baloh",
         RoleID: userRole.RoleID,
@@ -103,18 +102,19 @@ export function makeServer({ environment = "development" } = {}) {
         roles: [userRole],
       });
 
-      server.create("User", {
+      server.create("user", {
         UserID: uuidv4(),
         UserName: "Ira Vdov",
         RoleID: userRole.RoleID,
-        FirstName: "Ivan",
-        LastName: "Baloh",
+        FirstName: "Ira",
+        LastName: "Vdov",
         Email: "vdovychenko.ire@gmail.com",
         EncryptedPassword: "mgfhfjjd123",
         roles: [userRole],
       });
+      
     },
-
+    
     routes() {
       this.namespace = "/mirage-api";
 
@@ -146,12 +146,39 @@ export function makeServer({ environment = "development" } = {}) {
 
       this.get("/sports", (schema) => {
         return schema.sports.all();
-      });
+      }); 
 
       this.post("/sports", (schema, request) => {
         const newData = JSON.parse(request.requestBody);
         return schema.create("sport", newData).attrs;
       });
+
+      /* this.get("/sports", (schema, request) => {
+        const token = request.requestHeaders.Authorization;
+        console.log(token);
+
+        if (token && token !== "Bearer null") {
+            try {
+                const decodedToken = jwtDecode(token);
+                const userEmail = decodedToken.Email;
+                const user = schema.users.findBy({ Email: userEmail });
+                
+                if (user) {
+                    const sportIds = user.sportIds;
+                    const userSports = schema.sports.where((sport) => sportIds.includes(sport.id));
+                    return userSports;
+                }
+            } catch (error) {
+                console.error("Error decoding token:", error);
+                return [];
+            }
+        }
+        
+        const allSports = schema.sports.all();
+        const userSportsIds = schema.users.all().models.map(user => user.sportIds).flat();
+        const filteredSports = allSports.filter(sport => !userSportsIds.includes(sport.id));
+        return filteredSports;
+      }); */
 
       this.put("/sports/:SportID", (schema, request) => {
         const id = request.params.SportID;
@@ -160,8 +187,36 @@ export function makeServer({ environment = "development" } = {}) {
           .where({ SportID: id })
           .update(updatedData);
         return updatedSport;
-      });
+      }); 
 
+/*       this.put("/sports/:SportID", (schema, request) => {
+        const token = request.requestHeaders.Authorization;
+        console.log(token);
+      
+        if (!token) {
+          return new Response(401, { "Content-Type": "application/json" }, { error: "Unauthorized" });
+        }
+        const id = request.params.SportID;
+ 
+        const updatedData = JSON.parse(request.requestBody);
+        const decodedToken = jwtDecode(token);
+        const userEmail = decodedToken.Email;
+        console.log(userEmail)
+        const user = schema.users.findBy({ Email: userEmail });
+        console.log(user)
+        
+        if (!user) {
+          return new Response(401, { "Content-Type": "application/json" }, { error: "Unauthorized" });
+        }
+        const category = schema.sports.findBy({ SportID: id });
+      
+        if (!category || category.userId !== user.id) {
+          return new Response(403, { "Content-Type": "application/json" }, { error: "Forbidden" });
+        }
+        const updatedSport = schema.sports.where({ SportID: id }).update(updatedData);
+        return updatedSport; 
+      }); */
+      
       this.delete("/sports/:SportID", (schema, request) => {
         const id = request.params.SportID;
         const category = schema.sports.where({ SportID: id });
@@ -322,12 +377,56 @@ export function makeServer({ environment = "development" } = {}) {
             { error: "Invalid email or password." }
           );
         }
-
         const role = user.roles[1];
-
         return { user: { ...user.attrs, role } };
-      });
+      }); 
 
+/*       this.post("/login", async (schema, request) => {
+        const { Email, EncryptedPassword } = JSON.parse(request.requestBody);
+        const user = schema.users.findBy({ Email, EncryptedPassword });
+      
+        if (!user) {
+          return new Response(
+            401,
+            { "Content-Type": "application/json" },
+            { error: "Invalid email or password." }
+          );
+        }
+      
+        try {
+          const expressResponse = await fetch("http://localhost:8080/api/get-token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: Email }),
+            credentials: 'include'
+          });
+      
+          if (!expressResponse.ok) {
+            throw new Error("Failed to get access token from Express server.");
+          }
+      
+          const { accessToken } = await expressResponse.json();
+          user.update({ accessToken });
+          console.log(user);
+          console.log(schema.users.all);
+   
+          const role = user.roles[1];
+          return {
+            user: { ...user.attrs, role },
+            accessToken
+          };
+        } catch (error) {
+          console.error("Error fetching access token from Express server:", error);
+          return new Response(
+            500,
+            { "Content-Type": "application/json" },
+            { error: "Internal server error." }
+          );
+        }
+      }); */
+      
       this.post("/change-password", (schema, request) => {
         const { newPassword, email } = JSON.parse(request.requestBody);
         const user = schema.users.findBy({ Email: email });
@@ -352,7 +451,8 @@ export function makeServer({ environment = "development" } = {}) {
       this.get("/locations", (schema) => {
         return schema.locations.all();
       });
-    },
+      
+    },  
   });
 
   return server;

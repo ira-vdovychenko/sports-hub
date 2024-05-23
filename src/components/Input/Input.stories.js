@@ -2,7 +2,7 @@ import React from "react";
 import { Input } from "./Input.jsx";
 
 export default {
-    title: "Input/Input",
+    title: "Components/Input",
     component: Input,
     tags: ["autodocs"],
     argTypes: {

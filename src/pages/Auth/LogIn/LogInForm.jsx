@@ -13,7 +13,9 @@ import * as Styled from "./styled.js";
 
 export const LogInForm = () => {
   const isPasswordChangeSuccess = useSelector(state => state.auth.isPasswordChangeSuccess);
- 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   const {
     register,
     watch,
@@ -24,10 +26,6 @@ export const LogInForm = () => {
   });
 
   const [errorState, setErrorState] = useState({ status: null, message: "" });
- 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   
   const onSubmit = async (data) => {
     try {
