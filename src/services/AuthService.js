@@ -139,13 +139,14 @@ export const verifyToken = async () => {
     const response = await fetch("http://localhost:8080/api/verify-token", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+        "Authorization": `Bearer ${localStorage.getItem("accessToken").replace(/"/g, '')}`,      
         "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error("Failed to verify token.");
+      console.log(response)
+      throw new Error("Failed to verify token.");  
     }
 
     const responseData = await response.json();

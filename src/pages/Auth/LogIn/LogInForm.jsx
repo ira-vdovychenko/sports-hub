@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector} from "react-redux";
-import { setUser, setToken, setRole, setTokenExpirationTime, setAdmin } from "../../../redux/actions/authActions.js";
+import { useSelector} from "react-redux";
 import { logInUserMirage, getToken } from "../../../services/AuthService.js";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import { Input } from "../../../components/Input/Input.jsx";
 import { SecondarySmallButton, LargeButton } from "../../../components/Buttons/index.js";
 import { ReactComponent as FB } from "../../../assets/FB.svg";
@@ -14,8 +14,8 @@ import * as Styled from "./styled.js";
 export const LogInForm = () => {
   const isPasswordChangeSuccess = useSelector(state => state.auth.isPasswordChangeSuccess);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  
+  const { handleLogin } = useAuth();
+
   const {
     register,
     watch,
@@ -40,14 +40,6 @@ export const LogInForm = () => {
         const userRole = loginResultMirage.data.user?.RoleID;
         const isAdmin = loginResultMirage.data.user?.roleIds.includes("1");
 
-        dispatch(setUser(user));
-        dispatch(setRole(userRole));
-        dispatch(setAdmin(isAdmin));
-
-        localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("role", JSON.stringify(userRole));
-        localStorage.setItem("isAdmin", JSON.stringify(isAdmin));
-
         setErrorState({ status: null, message: "" });
 
         const userEmail = loginResultMirage.data.user?.Email;
@@ -56,11 +48,7 @@ export const LogInForm = () => {
           const accessToken = getTokenResult.data.accessToken;
           const decodedToken = jwtDecode(accessToken);
 
-          dispatch(setToken(accessToken));
-          dispatch(setTokenExpirationTime(decodedToken.exp));
-
-          localStorage.setItem("accessToken", JSON.stringify(accessToken));
-          localStorage.setItem("tokenExpirationTime", JSON.stringify(decodedToken.exp));
+          handleLogin(user, userRole, isAdmin, accessToken, decodedToken.exp);
 
           if (userRole === 2) {
             navigate("/");
@@ -114,7 +102,7 @@ export const LogInForm = () => {
           <Styled.InputLabel>Email address</Styled.InputLabel>
           <Input
             type="email"
-            width={"100%"}
+            size="100%"
             name="email"
             placeholder="Email@gmail.com"
             $error={errors.email} 
@@ -142,7 +130,7 @@ export const LogInForm = () => {
           </Styled.LabelsBox>
           <Input
             type="password"
-            width={"100%"}
+            size={"100%"}
             name="password"
             placeholder="8 + characters (letters and numbers)"
             $error={errors.password}

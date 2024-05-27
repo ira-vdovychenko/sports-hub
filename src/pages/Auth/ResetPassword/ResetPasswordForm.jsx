@@ -80,7 +80,7 @@ export const ResetPasswordForm = () => {
           <Styled.InputLabel>New Password</Styled.InputLabel>
           <Input
             type="password"
-            width={"100%"}
+            size="100%"
             name="password"
             placeholder="New Password"
             $error={errors.password}
@@ -107,7 +107,7 @@ export const ResetPasswordForm = () => {
           <Styled.InputLabel>Confirm Password</Styled.InputLabel>
           <Input
             type="password"
-            width={"100%"}
+            size="100%"
             name="confirmPassword"
             placeholder="Confirm Password"
             $error={errors.confirmPassword}

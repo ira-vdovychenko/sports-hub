@@ -1,5 +1,4 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { UserLayout } from "./components/layouts/UserLayout/UserLayout.jsx";
 import { AuthPage } from "./pages/Auth/AuthPage.jsx";
@@ -7,7 +6,6 @@ import { AdminLayout } from "./components/layouts/AdminLayout/AdminLayout.jsx";
 
 function App() {
   return (
-    <Router>
       <Routes>
         <Route path="*" element={<UserLayout />} />
         <Route path="register" element={<AuthPage />} />
@@ -16,7 +14,6 @@ function App() {
         <Route path="reset-password" element={<AuthPage />} />
         <Route path="admin/*" element={<AdminLayout />} />
       </Routes>
-    </Router>
   );
 }
 export default App;

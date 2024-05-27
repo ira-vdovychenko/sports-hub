@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { checkUserEmail, sendEmail, getToken } from "../../../services/AuthService.js";
 import { setToken } from "../../../redux/actions/authActions.js";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import { Link } from "react-router-dom";
 import { Input } from "../../../components/Input/Input.jsx";
 import { SecondarySmallButton, SmallTextButton, LargeButton} from "../../../components/Buttons/index.js";
@@ -10,6 +11,12 @@ import { SuccessEmailMessage } from "../index.js";
 import * as Styled from "./styled.js";
 
 export const ForgotPasswordForm = () => {
+  const { handleLogin } = useAuth();
+  const [email, setEmail] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [errorState, setErrorState] = useState({ status: null, message: "" });
+  const dispatch = useDispatch();
+
   const {
     register,
     watch,
@@ -18,11 +25,6 @@ export const ForgotPasswordForm = () => {
   } = useForm({
     mode: "onChange",
   });
-
-  const [email, setEmail] = useState("");
-  const [emailSent, setEmailSent] = useState(false);
-  const [errorState, setErrorState] = useState({ status: null, message: "" });
-  const dispatch = useDispatch();
 
   const onSubmit = async ({ email }) => {
     try {
@@ -37,8 +39,7 @@ export const ForgotPasswordForm = () => {
           if (getTokenResult.success) {
             const accessToken = getTokenResult.data.accessToken;
             dispatch(setToken(accessToken));
-            localStorage.setItem("accessToken", accessToken);
-            console.log("Token received:", getTokenResult.data.accessToken);
+            handleLogin(userEmail, null, false, accessToken, null);
           } else {
             console.error("Failed to get token:", getTokenResult.error);
           }
@@ -84,7 +85,7 @@ export const ForgotPasswordForm = () => {
             <Styled.InputLabel>Email address</Styled.InputLabel>
             <Input
               type="email"
-              width={"100%"}
+              size="100%"
               name="email"
               placeholder="Email@gmail.com"
               $error={errors.email} 

@@ -102,7 +102,7 @@ export const RegisterForm = () => {
             <Styled.InputLabel>FIRST NAME</Styled.InputLabel>
             <Input
               type="text"
-              width={"100%"}
+              size="100%"
               name="firstName"
               placeholder="John"
               $error={errors.firstName} 
@@ -129,7 +129,7 @@ export const RegisterForm = () => {
             <Styled.InputLabel>LAST NAME</Styled.InputLabel>
             <Input
               type="text"
-              width={"100%"}
+              size="100%"
               name="lastName"
               placeholder="Doe"
               $error={errors.lastName} 
@@ -157,7 +157,7 @@ export const RegisterForm = () => {
           <Styled.InputLabel>EMAIL</Styled.InputLabel>
           <Input
             type="email"
-            width={"100%"}
+            size="100%"
             name="email"
             placeholder="jonhdoe@gmail.com"
             $error={errors.email} 
@@ -180,7 +180,7 @@ export const RegisterForm = () => {
           <Styled.InputLabel>PASSWORD</Styled.InputLabel>
           <Input
             type="password"
-            width={"100%"}
+            size="100%"
             name="password"
             placeholder="8 + characters (letters and numbers)"
             $error={errors.password}

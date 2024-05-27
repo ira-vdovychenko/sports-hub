@@ -1,46 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
-import { logout, setAdmin } from "../../redux/actions/authActions.js";
-import { removeToken } from "../../services/AuthService.js";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
 import { SecondarySmallButton, SmallTextButton } from "../Buttons/index.js";
 import ellipse from "../../assets/Ellipse.png";
 import * as Styled from "./styled.js";
 
 export const Profile = () => {
-  const user = useSelector((state) => state.auth.user);
-  const token = useSelector((state) => state.auth.token);
-  const isAdmin = useSelector((state) => state.auth.isAdmin);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { isAuthenticated, user, isAdmin, handleLogout } = useAuth();
   const menuRef = useRef(null);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
 
-  const isAuthenticated = !!token;
-
-  useEffect(() => {
-    const isAdminLocal = localStorage.getItem("isAdmin");
-    if (isAdminLocal === "true") {
-      dispatch(setAdmin(true));
-    } else if (isAdminLocal === "false") {
-      dispatch(setAdmin(false));
-    }
-  }, []);
-
   const toggleProfileMenu = () => {
     setProfileMenuOpen(!isProfileMenuOpen);
-  };
-
-  const handleLogout = async () => {
-    await removeToken();  
-    setProfileMenuOpen(false);
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
-    localStorage.removeItem("role");
-    localStorage.removeItem("isAdmin");
-    localStorage.removeItem("tokenExpirationTime");
-    dispatch(logout());
-    navigate("/");
   };
 
   const handleClickOutside = (event) => {

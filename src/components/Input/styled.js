@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Input = styled.input`
-  width: ${(props) => props.width || "350px"};
-  height: ${(props) => props.height || "36px"};
+  width: ${(props) => props.size || "350px"};
+  height: 36px;
   outline: none;
   border: 1px solid
     ${(props) => {
