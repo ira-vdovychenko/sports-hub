@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { useFormikContext, Field, Form } from "formik";
+import { useFormikContext, Field } from "formik";
 import { Input } from "../../../../components/Input/Input.jsx";
 import { LongButton, SmallTextButton } from "../../../../components/Buttons/index.js";
 import { ReactComponent as AddLogoIcon } from "../../../../assets/add-logo-icon.svg";
@@ -13,6 +13,7 @@ export const TeamFormFields = ({ mode, mapLocation, addTeamButtonClicked, setIsT
   const subcategories = useSelector((state) => state.ia.subcategories);
 
   const fileInputRef = useRef(null);
+  const containerRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
   const [dropdownState, setDropdownState] = useState({
@@ -29,13 +30,13 @@ export const TeamFormFields = ({ mode, mapLocation, addTeamButtonClicked, setIsT
       setFieldValue("LocationName", mapLocation.LocationName);
       setFieldValue("LocationID", mapLocation.LocationID);
     }
-  }, [mapLocation]);
+  }, [mapLocation, setFieldValue]);
 
   useEffect(() => {
     if (mode === "edit" && dirty) {
       setIsTeamEdited(true);
     }
-  }, [dirty]);
+  }, [dirty, mode, setIsTeamEdited]);
 
   const handleLocationSelect = (location) => {
     setFieldValue("LocationName", location.LocationName);
@@ -97,10 +98,16 @@ export const TeamFormFields = ({ mode, mapLocation, addTeamButtonClicked, setIsT
   };
 
   const toggleMenu = (type) => {
-    setDropdownState((prev) => ({
-      ...prev,
-      [type]: !prev[type],
-    }));
+    setDropdownState((prev) => {
+      const newState = {
+        location: false,
+        category: false,
+        subcategory: false,
+        teamName: false,
+      };
+      newState[type] = !prev[type];
+      return newState;
+    });
   };
 
   const triggerFileInput = (e) => {
@@ -108,11 +115,29 @@ export const TeamFormFields = ({ mode, mapLocation, addTeamButtonClicked, setIsT
     fileInputRef.current.click();
   };
 
+  const handleClickOutside = (event) => {
+    if (containerRef.current && !containerRef.current.contains(event.target)) {
+      setDropdownState({
+        location: false,
+        category: false,
+        subcategory: false,
+        teamName: false,
+      });
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleMouseEnter = () => setIsHovering(true);
   const handleMouseLeave = () => setIsHovering(false);
 
   return (
-    <Styled.TeamsForm onSubmit={handleSubmit}>
+    <Styled.TeamsForm onSubmit={handleSubmit}  ref={containerRef}>
       <Styled.InputBox>
         <Styled.InputLabel>Select location</Styled.InputLabel>
         <Styled.DropdownContainer>
@@ -303,7 +328,7 @@ export const TeamFormFields = ({ mode, mapLocation, addTeamButtonClicked, setIsT
               ref={fileInputRef}
               type="file"
               accept="image/*"
-              inputStyle={{ visibility: "hidden" }}
+              style={{ visibility: "hidden" }}
               name="logo"
               onChange={(e) => {
                 handleChange(e);

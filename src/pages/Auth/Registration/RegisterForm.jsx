@@ -11,7 +11,6 @@ import { ReactComponent as Google } from "../../../assets/Google.svg";
 export const RegisterForm = () => {
   const {
     register,
-    watch,
     handleSubmit,
     formState: { errors },
     reset,
@@ -105,8 +104,6 @@ export const RegisterForm = () => {
               size="100%"
               name="firstName"
               placeholder="John"
-              $error={errors.firstName} 
-              $success={!!watch("firstName")}
               {...register("firstName", {
                 required: true,
                 minLength: {
@@ -132,8 +129,6 @@ export const RegisterForm = () => {
               size="100%"
               name="lastName"
               placeholder="Doe"
-              $error={errors.lastName} 
-              $success={!!watch("lastName")}
               {...register("lastName", {
                 required: true,
                 minLength: {
@@ -160,8 +155,6 @@ export const RegisterForm = () => {
             size="100%"
             name="email"
             placeholder="jonhdoe@gmail.com"
-            $error={errors.email} 
-            $success={!!watch("email")}
             {...register("email", {
               required: "Email is required.",
               pattern: {
@@ -183,8 +176,6 @@ export const RegisterForm = () => {
             size="100%"
             name="password"
             placeholder="8 + characters (letters and numbers)"
-            $error={errors.password}
-            $success={!!watch("password")}
             {...register("password", {
               required: true,
               minLength: {

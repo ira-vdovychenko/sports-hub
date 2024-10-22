@@ -11,9 +11,9 @@ import * as Styled from "./styled.js";
 export const ResetPasswordForm = () => {
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm({ mode: "onChange" });
 
   const [errorState, setErrorState] = useState({ status: null, message: "" });
@@ -83,8 +83,6 @@ export const ResetPasswordForm = () => {
             size="100%"
             name="password"
             placeholder="New Password"
-            $error={errors.password}
-            $success={!!watch("password")}
             {...register("password", {
               required: true,
               minLength: {
@@ -110,8 +108,6 @@ export const ResetPasswordForm = () => {
             size="100%"
             name="confirmPassword"
             placeholder="Confirm Password"
-            $error={errors.confirmPassword}
-            $success={!!watch("confirmPassword")}
             {...register("confirmPassword", {
               required: true,
               validate: (value) =>

@@ -18,7 +18,6 @@ export const LogInForm = () => {
 
   const {
     register,
-    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -105,8 +104,6 @@ export const LogInForm = () => {
             size="100%"
             name="email"
             placeholder="Email@gmail.com"
-            $error={errors.email} 
-            $success={!!watch("email")}
             {...register("email", {
               required: "Email is required.",
               pattern: {
@@ -133,8 +130,6 @@ export const LogInForm = () => {
             size={"100%"}
             name="password"
             placeholder="8 + characters (letters and numbers)"
-            $error={errors.password}
-            $success={!!watch("password")}
             {...register("password", {
               required: true,
               minLength: {

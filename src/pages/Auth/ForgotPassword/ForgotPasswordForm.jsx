@@ -19,7 +19,6 @@ export const ForgotPasswordForm = () => {
 
   const {
     register,
-    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -88,8 +87,7 @@ export const ForgotPasswordForm = () => {
               size="100%"
               name="email"
               placeholder="Email@gmail.com"
-              $error={errors.email} 
-              $success={!!watch("email")}
+
               {...register("email", {
                 required: "Email is required.",
                 pattern: {

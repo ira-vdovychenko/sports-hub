@@ -14,8 +14,6 @@ export default {
         width: { control: "text" },
         height: { control: "text" },
         style: { control: "object" },
-        $error: { control: "boolean" },
-        $success: { control: "boolean" },
         hover: { control: "boolean" },
         active: { control: "boolean" }, 
       },
@@ -29,10 +27,6 @@ export default {
           ? "hover"
           : args.active
             ? "active"
-            : args.$error
-              ? "$error"
-            : args.$success
-              ? "$success"
               : undefined
       }
     >
@@ -48,8 +42,6 @@ export default {
     height: '36px',
     hover: false,
     active: false,
-    $error: false,
-    $success: false,
   };
   
   export const Hover = Template.bind({});
@@ -70,21 +62,4 @@ export default {
     active: true,
   };
   
-  export const Error = Template.bind({});
-  Error.args = {
-    placeholder: "Enter Your Name",
-    inputStyle: { fontSize: 12, fontWeight: 600, fontFamily: "Open Sans, sans-serif" },
-    width: '350px',
-    height: '36px',
-    $error: true,
-  };
-  
-  export const Success = Template.bind({});
-  Success.args = {
-    placeholder: "Enter Your Name",
-    inputStyle: { fontSize: 12, fontWeight: 600, fontFamily: "Open Sans, sans-serif" },
-    width: '350px',
-    height: '36px',
-    $success: true,
-  };
   
